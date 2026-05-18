@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuraScale OS — WhatsApp Retention Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #4F7CFF;
+    --blue-light: #EEF2FF;
+    --blue-mid: #C7D5FF;
+    --green: #10B981;
+    --green-light: #ECFDF5;
+    --amber: #F59E0B;
+    --amber-light: #FFFBEB;
+    --red: #EF4444;
+    --red-light: #FEF2F2;
+    --bg: #F7F8FA;
+    --surface: #FFFFFF;
+    --surface2: #F3F4F8;
+    --border: rgba(0,0,0,0.07);
+    --border2: rgba(0,0,0,0.12);
+    --text-primary: #0F1117;
+    --text-secondary: #6B7280;
+    --text-tertiary: #9CA3AF;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 22px;
+    --radius-xl: 28px;
+    --font: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    --serif: 'Instrument Serif', Georgia, serif;
+    --nav-h: 64px;
+    --bottom-nav-h: 76px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NAVBAR ── */
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: var(--nav-h);
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 16px;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    text-decoration: none;
+  }
+
+  .nav-logo-mark {
+    width: 34px;
+    height: 34px;
+    background: linear-gradient(135deg, #4F7CFF 0%, #7C3AED 100%);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .nav-logo-mark svg { width: 18px; height: 18px; fill: white; }
+
+  .nav-logo-text { display: flex; flex-direction: column; }
+  .nav-logo-title { font-size: 14px; font-weight: 700; color: var(--text-primary); line-height: 1.1; letter-spacing: -0.3px; }
+  .nav-logo-sub { font-size: 10px; font-weight: 500; color: var(--text-secondary); letter-spacing: 0.2px; }
+
+  .nav-spacer { flex: 1; }
+
+  .nav-select {
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid var(--border2);
+    border-radius: 9px;
+    background: var(--surface);
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+    display: none;
+  }
+
+  @media (min-width: 640px) { .nav-select { display: block; } }
+
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: var(--green-light);
+    border: 1px solid rgba(16,185,129,0.2);
+    font-size: 12px;
+    font-weight: 600;
+    color: #059669;
+    white-space: nowrap;
+  }
+
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+
+  .nav-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text-secondary);
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  .nav-icon:hover { background: var(--surface2); }
+
+  .nav-icon svg { width: 18px; height: 18px; }
+
+  .notif-dot {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    width: 7px;
+    height: 7px;
+    background: var(--blue);
+    border-radius: 50%;
+    border: 2px solid white;
+  }
+
+  /* ── LAYOUT ── */
+  .main-layout {
+    display: flex;
+    min-height: calc(100vh - var(--nav-h));
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 20px 12px;
+    position: sticky;
+    top: var(--nav-h);
+    height: calc(100vh - var(--nav-h));
+    overflow-y: auto;
+    display: none;
+  }
+
+  @media (min-width: 1024px) { .sidebar { display: block; } }
+
+  .sidebar-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-tertiary);
+    padding: 4px 12px;
+    margin: 16px 0 6px;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    text-decoration: none;
+    margin-bottom: 2px;
+  }
+
+  .sidebar-item:hover { background: var(--surface2); color: var(--text-primary); }
+
+  .sidebar-item.active {
+    background: var(--blue-light);
+    color: var(--blue);
+  }
+
+  .sidebar-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  .sidebar-badge {
+    margin-left: auto;
+    background: var(--blue);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 20px;
+    min-width: 18px;
+    text-align: center;
+  }
+
+  /* ── CONTENT ── */
+  .content {
+    flex: 1;
+    min-width: 0;
+    padding: 28px 20px;
+    padding-bottom: calc(var(--bottom-nav-h) + 20px);
+  }
+
+  @media (min-width: 640px) {
+    .content { padding: 32px 28px; padding-bottom: calc(var(--bottom-nav-h) + 20px); }
+  }
+
+  @media (min-width: 1024px) {
+    .content { padding: 36px 40px; padding-bottom: 40px; }
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 40px 32px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+
+  .hero-bg-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.12;
+    pointer-events: none;
+  }
+
+  .hero-bg-blob-1 {
+    width: 300px;
+    height: 300px;
+    background: #4F7CFF;
+    top: -80px;
+    right: -60px;
+  }
+
+  .hero-bg-blob-2 {
+    width: 200px;
+    height: 200px;
+    background: #7C3AED;
+    bottom: -60px;
+    right: 100px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: var(--blue-light);
+    border: 1px solid var(--blue-mid);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--blue);
+    margin-bottom: 16px;
+  }
+
+  .hero-badge svg { width: 13px; height: 13px; }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(26px, 5vw, 44px);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--text-primary);
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+
+  .hero p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 520px;
+    margin-bottom: 24px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 20px;
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(79,124,255,0.35);
+  }
+
+  .btn-primary:hover { background: #3D6AEF; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(79,124,255,0.4); }
+  .btn-primary svg { width: 15px; height: 15px; }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 20px;
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    font-family: var(--font);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-ghost:hover { background: var(--surface2); }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+  }
+
+  .section-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .view-all {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .view-all svg { width: 14px; height: 14px; }
+
+  /* ── ANALYTICS GRID ── */
+  .analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  @media (min-width: 768px) {
+    .analytics-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .analytics-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 18px 16px;
+    transition: all 0.2s;
+    cursor: default;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .analytics-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border2);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .analytics-card:nth-child(1) { animation-delay: 0.05s; }
+  .analytics-card:nth-child(2) { animation-delay: 0.1s; }
+  .analytics-card:nth-child(3) { animation-delay: 0.15s; }
+  .analytics-card:nth-child(4) { animation-delay: 0.2s; }
+
+  .analytics-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+
+  .analytics-icon svg { width: 18px; height: 18px; }
+
+  .analytics-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.8px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .analytics-label {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .analytics-growth {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #059669;
+    background: var(--green-light);
+    border-radius: 6px;
+    padding: 2px 7px;
+  }
+
+  .analytics-growth svg { width: 11px; height: 11px; }
+
+  /* ── AUTOMATION GRID ── */
+  .automation-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  @media (min-width: 640px) {
+    .automation-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 1200px) {
+    .automation-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .automation-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 20px 18px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .automation-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 60%, rgba(79,124,255,0.03) 100%);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .automation-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(79,124,255,0.2);
+  }
+
+  .automation-card:hover::before {
+    background: linear-gradient(135deg, transparent 40%, rgba(79,124,255,0.05) 100%);
+  }
+
+  .automation-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .automation-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .automation-icon svg { width: 20px; height: 20px; }
+
+  /* Toggle Switch */
+  .toggle {
+    position: relative;
+    width: 42px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .toggle input { opacity: 0; width: 0; height: 0; }
+
+  .toggle-track {
+    position: absolute;
+    inset: 0;
+    background: #D1D5DB;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.25s;
+  }
+
+  .toggle input:checked + .toggle-track { background: var(--blue); }
+
+  .toggle-thumb {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: white;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    pointer-events: none;
+  }
+
+  .toggle input:checked ~ .toggle-thumb { transform: translateX(18px); }
+
+  .automation-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 5px;
+    line-height: 1.3;
+    letter-spacing: -0.2px;
+  }
+
+  .automation-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ── PATIENTS TABLE ── */
+  .patients-table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+
+  .patients-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 180px;
+    height: 34px;
+    padding: 0 12px 0 34px;
+    border: 1px solid var(--border2);
+    border-radius: 9px;
+    background: var(--bg);
+    font-family: var(--font);
+    font-size: 13px;
+    color: var(--text-primary);
+    outline: none;
+    position: relative;
+  }
+
+  .search-input:focus { border-color: var(--blue); background: var(--surface); }
+
+  .search-wrap { position: relative; flex: 1; min-width: 180px; }
+
+  .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-tertiary);
+    pointer-events: none;
+  }
+
+  .search-icon svg { width: 15px; height: 15px; }
+
+  .filter-btn {
+    height: 34px;
+    padding: 0 14px;
+    border: 1px solid var(--border2);
+    border-radius: 9px;
+    background: var(--surface);
+    font-family: var(--font);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .filter-btn svg { width: 14px; height: 14px; }
+  .filter-btn:hover { background: var(--surface2); color: var(--text-primary); }
+
+  .patients-list { overflow-x: auto; }
+
+  .patient-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+    transition: background 0.15s;
+    min-width: 600px;
+  }
+
+  .patient-row:last-child { border-bottom: none; }
+  .patient-row:hover { background: var(--bg); }
+
+  .patient-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .patient-info { flex: 1; min-width: 0; }
+
+  .patient-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .patient-phone {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 1px;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .status-confirmed { background: var(--green-light); color: #059669; }
+  .status-pending { background: var(--amber-light); color: #D97706; }
+  .status-missed { background: var(--red-light); color: #DC2626; }
+  .status-followup { background: var(--blue-light); color: var(--blue); }
+
+  .patient-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .action-btn {
+    height: 28px;
+    padding: 0 10px;
+    border: 1px solid var(--border2);
+    border-radius: 7px;
+    background: var(--surface);
+    font-family: var(--font);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .action-btn:hover { background: var(--blue-light); color: var(--blue); border-color: var(--blue-mid); }
+
+  /* ── PRICING ── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  @media (min-width: 720px) {
+    .pricing-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .pricing-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 26px 22px;
+    position: relative;
+    transition: all 0.2s;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .pricing-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .pricing-card.featured {
+    border-color: var(--blue);
+    border-width: 2px;
+    box-shadow: 0 0 0 4px rgba(79,124,255,0.06);
+  }
+
+  .pricing-popular-badge {
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--blue);
+    color: white;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+  }
+
+  .pricing-tier {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+  }
+
+  .pricing-price {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .pricing-price span { font-size: 16px; font-weight: 600; color: var(--text-secondary); }
+  .pricing-desc { font-size: 12.5px; color: var(--text-secondary); margin-bottom: 18px; line-height: 1.5; }
+
+  .pricing-features { list-style: none; margin-bottom: 20px; }
+
+  .pricing-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pricing-feature:last-child { border-bottom: none; }
+
+  .pricing-check {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--green-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .pricing-check svg { width: 10px; height: 10px; color: var(--green); }
+
+  .btn-pricing {
+    width: 100%;
+    padding: 11px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font);
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    border: none;
+  }
+
+  .btn-pricing-outline {
+    background: transparent;
+    border: 1.5px solid var(--border2);
+    color: var(--text-primary);
+  }
+
+  .btn-pricing-outline:hover { background: var(--surface2); }
+
+  .btn-pricing-solid {
+    background: var(--blue);
+    color: white;
+    box-shadow: 0 2px 8px rgba(79,124,255,0.35);
+  }
+
+  .btn-pricing-solid:hover { background: #3D6AEF; transform: translateY(-1px); }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--bottom-nav-h);
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 8px;
+    z-index: 99;
+  }
+
+  @media (min-width: 1024px) { .bottom-nav { display: none; } }
+
+  .bnav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    transition: color 0.15s;
+    flex: 1;
+    max-width: 80px;
+  }
+
+  .bnav-item.active { color: var(--blue); }
+  .bnav-item svg { width: 22px; height: 22px; }
+
+  .bnav-fab {
+    width: 52px;
+    height: 52px;
+    border-radius: 18px;
+    background: var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(79,124,255,0.4);
+    flex-shrink: 0;
+    margin: 0 4px;
+    transition: all 0.2s;
+  }
+
+  .bnav-fab:hover { transform: scale(1.05); }
+  .bnav-fab svg { width: 24px; height: 24px; color: white; }
+
+  /* ── CHART MINI ── */
+  .sparkline-wrap { height: 36px; margin-top: 10px; }
+  .sparkline { width: 100%; height: 100%; }
+
+  /* ── UTILITY ── */
+  .mb-20 { margin-bottom: 20px; }
+  .mb-28 { margin-bottom: 28px; }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--surface2);
+    color: var(--text-secondary);
+  }
+
+  /* ── MINI CHART BAR ── */
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 32px;
+    margin-top: 8px;
+  }
+
+  .bar {
+    flex: 1;
+    border-radius: 3px 3px 0 0;
+    background: var(--blue-mid);
+    transition: background 0.2s;
+  }
+
+  .bar.highlight { background: var(--blue); }
+
+  /* ── FADE IN ── */
+  .fade-in {
+    animation: fadeUp 0.6s ease both;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 1.5C5.96 1.5 3.5 3.96 3.5 7c0 1.68.76 3.18 1.95 4.2L4.5 14.5l3.1-1.55C8.09 13.13 8.54 13.2 9 13.2c3.04 0 5.5-2.46 5.5-5.5S12.04 1.5 9 1.5z" opacity=".4"/>
+        <path d="M9 2.5C6.51 2.5 4.5 4.51 4.5 7s2.01 4.5 4.5 4.5c.56 0 1.09-.1 1.59-.28l2.91 1.28-.85-2.78C12.86 8.92 13.5 8.02 13.5 7c0-2.49-2.01-4.5-4.5-4.5z"/>
+      </svg>
+    </div>
+    <div class="nav-logo-text">
+      <span class="nav-logo-title">AuraScale OS</span>
+      <span class="nav-logo-sub">WhatsApp Retention Engine</span>
+    </div>
+  </a>
+
+  <div class="nav-spacer"></div>
+
+  <select class="nav-select">
+    <option>🏥 Apollo Dental, Kolkata</option>
+    <option>🏥 Sunrise Clinic, Howrah</option>
+    <option>🏥 City Diagnostics</option>
+  </select>
+
+  <select class="nav-select">
+    <option>🇮🇳 India</option>
+    <option>🇦🇪 UAE</option>
+    <option>🇺🇸 USA</option>
+  </select>
+
+  <div class="live-badge">
+    <div class="live-dot"></div>
+    Live
+  </div>
+
+  <div class="nav-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+      <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+    </svg>
+    <div class="notif-dot"></div>
+  </div>
+</nav>
+
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section-label">Main</div>
+
+    <a class="sidebar-item active" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      Dashboard
+    </a>
+
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+      Patients
+      <span class="sidebar-badge">128</span>
+    </a>
+
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+      Automation
+    </a>
+
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+        <line x1="6" y1="20" x2="6" y2="14"/>
+      </svg>
+      Reports
+    </a>
+
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      Broadcasts
+      <span class="sidebar-badge">3</span>
+    </a>
+
+    <div class="sidebar-section-label">Settings</div>
+
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+      </svg>
+      Integrations
+    </a>
+
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+      Settings
+    </a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+
+    <!-- HERO -->
+    <div class="hero fade-in" style="animation-delay:0.05s">
+      <div class="hero-bg-blob hero-bg-blob-1"></div>
+      <div class="hero-bg-blob hero-bg-blob-2"></div>
+
+      <div class="hero-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        Automation Active · 8 Workflows Running
+      </div>
+
+      <h1>WhatsApp Retention Engine</h1>
+      <p>Manage patient communication and automation workflows. Keep your clinic thriving with intelligent reminders, follow-ups, and engagement tools.</p>
+
+      <div class="hero-actions">
+        <button class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polygon points="10,8 16,12 10,16 10,8"/>
+          </svg>
+          Run Broadcast
+        </button>
+        <button class="btn-ghost">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          Schedule
+        </button>
+      </div>
+    </div>
+
+    <!-- ANALYTICS GRID -->
+    <div class="section-header mb-20">
+      <div>
+        <div class="section-title">Overview</div>
+        <div class="section-sub">Last 30 days · Apollo Dental</div>
+      </div>
+      <a class="view-all" href="#">
+        Full Report
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="analytics-grid">
+      <div class="analytics-card">
+        <div class="analytics-icon" style="background:#EEF2FF">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4F7CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <div class="analytics-value">4,821</div>
+        <div class="analytics-label">Messages Sent</div>
+        <div class="analytics-growth">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+          +18.4%
+        </div>
+        <div class="bar-chart">
+          <div class="bar" style="height:40%"></div><div class="bar" style="height:55%"></div>
+          <div class="bar" style="height:48%"></div><div class="bar" style="height:65%"></div>
+          <div class="bar" style="height:58%"></div><div class="bar" style="height:72%"></div>
+          <div class="bar highlight" style="height:88%"></div>
+        </div>
+      </div>
+
+      <div class="analytics-card">
+        <div class="analytics-icon" style="background:#ECFDF5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="analytics-value">312</div>
+        <div class="analytics-label">Returning Patients</div>
+        <div class="analytics-growth">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+          +24.1%
+        </div>
+        <div class="bar-chart">
+          <div class="bar" style="height:35%"></div><div class="bar" style="height:42%"></div>
+          <div class="bar" style="height:50%"></div><div class="bar" style="height:60%"></div>
+          <div class="bar" style="height:55%"></div><div class="bar" style="height:68%"></div>
+          <div class="bar highlight" style="height:80%"></div>
+        </div>
+      </div>
+
+      <div class="analytics-card">
+        <div class="analytics-icon" style="background:#FFFBEB">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <div class="analytics-value">89</div>
+        <div class="analytics-label">Reviews Generated</div>
+        <div class="analytics-growth">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+          +31.6%
+        </div>
+        <div class="bar-chart">
+          <div class="bar" style="height:30%"></div><div class="bar" style="height:38%"></div>
+          <div class="bar" style="height:45%"></div><div class="bar" style="height:55%"></div>
+          <div class="bar" style="height:62%"></div><div class="bar" style="height:70%"></div>
+          <div class="bar highlight" style="height:85%"></div>
+        </div>
+      </div>
+
+      <div class="analytics-card">
+        <div class="analytics-icon" style="background:#F0FDF4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div class="analytics-value">96.3%</div>
+        <div class="analytics-label">Automation Success Rate</div>
+        <div class="analytics-growth">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+          +2.8%
+        </div>
+        <div class="bar-chart">
+          <div class="bar" style="height:82%"></div><div class="bar" style="height:85%"></div>
+          <div class="bar" style="height:88%"></div><div class="bar" style="height:87%"></div>
+          <div class="bar" style="height:91%"></div><div class="bar" style="height:93%"></div>
+          <div class="bar highlight" style="height:96%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTOMATION SECTION -->
+    <div class="section-header mb-20">
+      <div>
+        <div class="section-title">Automation Workflows</div>
+        <div class="section-sub">8 active · Toggle to enable or disable</div>
+      </div>
+    </div>
+
+    <div class="automation-grid mb-28">
+
+      <!-- Card 1 -->
+      <div class="automation-card" style="animation-delay:0.08s">
+        <div class="automation-card-header">
+          <div class="automation-icon" style="background:#EEF2FF">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#4F7CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <div class="automation-title">Appointment Confirmation</div>
+        <div class="automation-desc">Automatically confirms appointments via WhatsApp 24h before visit.</div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="automation-card" style="animation-delay:0.12s">
+        <div class="automation-card-header">
+          <div class="automation-icon" style="background:#FEF3C7">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/>
+            </svg>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <div class="automation-title">14-Day Return Reminder</div>
+        <div class="automation-desc">Re-engages patients who haven't booked a follow-up in 2 weeks.</div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="automation-card" style="animation-delay:0.16s">
+        <div class="automation-card-header">
+          <div class="automation-icon" style="background:#FFF7ED">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <div class="automation-title">Google Review Request</div>
+        <div class="automation-desc">Sends review prompts 2 hours after each successful appointment.</div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="automation-card" style="animation-delay:0.20s">
+        <div class="automation-card-header">
+          <div class="automation-icon" style="background:#F0FDF4">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"/>
+            </svg>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <div class="automation-title">48-Hour Follow-Up</div>
+        <div class="automation-desc">Checks patient recovery and satisfaction two days post-visit.</div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="automation-card" style="animation-delay:0.24s">
+        <div class="automation-card-header">
+          <div class="automation-icon" style="background:#F5F3FF">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <div class="automation-title">WhatsApp Broadcast Campaigns</div>
+        <div class="automation-desc">Scheduled bulk messages to segmented patient lists.</div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="automation-card" style="animation-delay:0.28s">
+        <div class="automation-card-header">
+          <div class="automation-icon" style="background:#EEF2FF">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#4F7CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <div class="automation-title">AI Reception Assistant</div>
+        <div class="automation-desc">GPT-powered bot handles queries, bookings and FAQs 24/7.</div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="automation-card" style="animation-delay:0.32s">
+        <div class="automation-card-header">
+          <div class="automation-icon" style="background:#FEF2F2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <label class="toggle">
+            <input type="checkbox">
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <div class="automation-title">Missed Appointment Recovery</div>
+        <div class="automation-desc">Automatically reaches out to no-show patients to reschedule.</div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="automation-card" style="animation-delay:0.36s">
+        <div class="automation-card-header">
+          <div class="automation-icon" style="background:#F0FDF4">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
+            </svg>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <div class="automation-title">Smart Patient Tags</div>
+        <div class="automation-desc">Auto-labels patients by treatment type, visit frequency, and value.</div>
+      </div>
+    </div>
+
+    <!-- RECENT PATIENTS -->
+    <div class="section-header mb-20">
+      <div>
+        <div class="section-title">Recent Patients</div>
+        <div class="section-sub">Today · 14 interactions</div>
+      </div>
+      <a class="view-all" href="#">
+        All Patients
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="patients-table-wrap fade-in" style="animation-delay:0.2s">
+      <div class="patients-toolbar">
+        <div class="search-wrap">
+          <div class="search-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </div>
+          <input class="search-input" type="text" placeholder="Search patients…">
+        </div>
+        <button class="filter-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/>
+          </svg>
+          Filter
+        </button>
+        <button class="filter-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Export
+        </button>
+      </div>
+
+      <div class="patients-list">
+        <!-- Patient 1 -->
+        <div class="patient-row">
+          <div class="patient-avatar" style="background:#EEF2FF;color:#4F7CFF">PS</div>
+          <div class="patient-info">
+            <div class="patient-name">Priya Sharma</div>
+            <div class="patient-phone">+91 98300 12345</div>
+          </div>
+          <span class="status-badge status-confirmed">✓ Confirmed</span>
+          <div class="patient-actions">
+            <button class="action-btn">Reminder</button>
+            <button class="action-btn">Follow-Up</button>
+            <button class="action-btn">Review</button>
+          </div>
+        </div>
+
+        <!-- Patient 2 -->
+        <div class="patient-row">
+          <div class="patient-avatar" style="background:#FEF3C7;color:#D97706">RB</div>
+          <div class="patient-info">
+            <div class="patient-name">Rahul Bose</div>
+            <div class="patient-phone">+91 70001 67890</div>
+          </div>
+          <span class="status-badge status-pending">⏳ Pending</span>
+          <div class="patient-actions">
+            <button class="action-btn">Reminder</button>
+            <button class="action-btn">Follow-Up</button>
+            <button class="action-btn">Confirm</button>
+          </div>
+        </div>
+
+        <!-- Patient 3 -->
+        <div class="patient-row">
+          <div class="patient-avatar" style="background:#FEF2F2;color:#DC2626">AM</div>
+          <div class="patient-info">
+            <div class="patient-name">Ananya Mukherjee</div>
+            <div class="patient-phone">+91 83200 45678</div>
+          </div>
+          <span class="status-badge status-missed">✕ Missed</span>
+          <div class="patient-actions">
+            <button class="action-btn">Reminder</button>
+            <button class="action-btn">Follow-Up</button>
+            <button class="action-btn">Confirm</button>
+          </div>
+        </div>
+
+        <!-- Patient 4 -->
+        <div class="patient-row">
+          <div class="patient-avatar" style="background:#EEF2FF;color:#4F7CFF">SK</div>
+          <div class="patient-info">
+            <div class="patient-name">Suresh Kumar</div>
+            <div class="patient-phone">+91 91234 56789</div>
+          </div>
+          <span class="status-badge status-followup">↩ Follow-Up</span>
+          <div class="patient-actions">
+            <button class="action-btn">Reminder</button>
+            <button class="action-btn">Review</button>
+            <button class="action-btn">Confirm</button>
+          </div>
+        </div>
+
+        <!-- Patient 5 -->
+        <div class="patient-row">
+          <div class="patient-avatar" style="background:#F0FDF4;color:#059669">ND</div>
+          <div class="patient-info">
+            <div class="patient-name">Nidhi Das</div>
+            <div class="patient-phone">+91 95551 23456</div>
+          </div>
+          <span class="status-badge status-confirmed">✓ Confirmed</span>
+          <div class="patient-actions">
+            <button class="action-btn">Reminder</button>
+            <button class="action-btn">Follow-Up</button>
+            <button class="action-btn">Review</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRICING SECTION -->
+    <div class="section-header mb-20" style="margin-top:40px">
+      <div>
+        <div class="section-title">Plans & Pricing</div>
+        <div class="section-sub">Choose the right plan for your clinic</div>
+      </div>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- Starter -->
+      <div class="pricing-card" style="animation-delay:0.1s">
+        <div class="pricing-tier">Starter</div>
+        <div class="pricing-price">₹999<span>/mo</span></div>
+        <div class="pricing-desc">Perfect for solo practitioners and small clinics getting started with automation.</div>
+        <ul class="pricing-features">
+          <li class="pricing-feature">
+            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            500 WhatsApp reminders/month
+          </li>
+          <li class="pricing-feature">
+            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            Appointment confirmations
+          </li>
+          <li class="pricing-feature">
+            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            Follow-up automation
+          </li>
+          <li class="pricing-feature">
+            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            Basic analytics dashboard
+          </li>
+        </ul>
+        <button class="btn-pricing btn-pricing-outline">Get Started</button>
+      </div>
+
+      <!-- Growth - Featured -->
+      <div class="pricing-card featured" style="animation-delay:0.17s">
+        <div class="pricing-popular-badge">✦ Most Popular</div>
+        <div class="pricing-tier" style="color:var(--blue)">Growth</div>
+        <div class="pricing-price">₹1,999<span>/mo</span></div>
+        <div class="pricing-desc">Everything growing clinics need to automate and scale patient communication.</div>
+        <ul class="pricing-features">
+          <li class="pricing-feature">
+            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            Everything in Starter
+          </li>
+          <li class="pricing-feature">
+            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            AI Reception Assistant
+          </li>
+          <li class="pricing-feature">
+            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            Broadcast campaigns
+          </li>
+          <li class="pricing-feature">
+            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            Google Review automation
+          </li>
+          <li class="pricing-feature">
+            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            Smart patient tagging
+          </li>
+        </ul>
+        <button class="btn-pricing btn-pricing-solid">Start Free Trial</button>
+      </div>
+
+      <!-- Pro -->
+      <div class="pricing-card" style="animation-delay:0.24s">
+        <div class="pricing-tier">Pro</div>
+        <div class="pricing-price">₹2,999<span>/mo</span></div>
+        <div class="pricing-desc">Enterprise-grade for multi-location clinics and diagnostic chains.</div>
+        <ul class="pricing-features">
+          <li class="pricing-feature">
+            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            Everything in Growth
+          </li>
+          <li class="pricing-feature">
+            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            Unlimited workflows
+          </li>
+          <li class="pricing-feature">
+            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            Multi-clinic support
+          </li>
+          <li class="pricing-feature">
+            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            Advanced analytics suite
+          </li>
+          <li class="pricing-feature">
+            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            Priority support (SLA)
+          </li>
+        </ul>
+        <button class="btn-pricing btn-pricing-outline">Contact Sales</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- BOTTOM NAV (mobile/tablet) -->
+<nav class="bottom-nav">
+  <div class="bnav-item active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect>
+      <rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
+    </svg>
+    Dashboard
+  </div>
+  <div class="bnav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+    </svg>
+    Patients
+  </div>
+  <div class="bnav-fab">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+  </div>
+  <div class="bnav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+    </svg>
+    Automation
+  </div>
+  <div class="bnav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+      <line x1="6" y1="20" x2="6" y2="14"/>
+    </svg>
+    Reports
+  </div>
+</nav>
+
+<script>
+  document.querySelectorAll('.toggle input').forEach(cb => {
+    cb.addEventListener('change', function() {
+      const card = this.closest('.automation-card');
+      if (this.checked) {
+        card.style.opacity = '1';
+      } else {
+        card.style.opacity = '0.55';
+      }
+    });
+  });
+
+  document.querySelectorAll('.action-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const orig = this.textContent;
+      this.textContent = '✓ Sent';
+      this.style.background = 'var(--green-light)';
+      this.style.color = '#059669';
+      this.style.borderColor = 'rgba(16,185,129,0.2)';
+      setTimeout(() => {
+        this.textContent = orig;
+        this.style.background = '';
+        this.style.color = '';
+        this.style.borderColor = '';
+      }, 1800);
+    });
+  });
+
+  document.querySelectorAll('.bnav-item').forEach(item => {
+    item.addEventListener('click', function() {
+      document.querySelectorAll('.bnav-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
