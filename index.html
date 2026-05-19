@@ -5,67 +5,75 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AuraScale OS — WhatsApp Retention Engine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
     --blue: #4F7CFF;
-    --blue-light: #EEF2FF;
-    --blue-mid: #C7D5FF;
-    --green: #10B981;
-    --green-light: #ECFDF5;
+    --blue-soft: #EEF2FF;
+    --blue-mid: #C7D4FF;
+    --emerald: #10B981;
+    --emerald-soft: #ECFDF5;
+    --emerald-mid: #A7F3D0;
     --amber: #F59E0B;
-    --amber-light: #FFFBEB;
+    --amber-soft: #FFFBEB;
     --red: #EF4444;
-    --red-light: #FEF2F2;
-    --bg: #F7F8FA;
-    --surface: #FFFFFF;
-    --surface2: #F3F4F8;
-    --border: rgba(0,0,0,0.07);
-    --border2: rgba(0,0,0,0.12);
-    --text-primary: #0F1117;
-    --text-secondary: #6B7280;
-    --text-tertiary: #9CA3AF;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-md: 0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
-    --shadow-lg: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+    --red-soft: #FEF2F2;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-300: #D1D5DB;
+    --gray-400: #9CA3AF;
+    --gray-500: #6B7280;
+    --gray-600: #4B5563;
+    --gray-700: #374151;
+    --gray-800: #1F2937;
+    --gray-900: #111827;
+    --white: #FFFFFF;
+    --surface: #FAFAFA;
     --radius-sm: 10px;
     --radius-md: 16px;
     --radius-lg: 22px;
     --radius-xl: 28px;
-    --font: 'Plus Jakarta Sans', -apple-system, sans-serif;
-    --serif: 'Instrument Serif', Georgia, serif;
-    --nav-h: 64px;
-    --bottom-nav-h: 76px;
+    --shadow-xs: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.05);
+    --border: rgba(0,0,0,0.07);
+    --border-med: rgba(0,0,0,0.10);
   }
 
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: var(--font);
-    background: var(--bg);
-    color: var(--text-primary);
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--surface);
+    color: var(--gray-800);
+    line-height: 1.6;
     min-height: 100vh;
     overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
   }
 
   /* ── NAVBAR ── */
-  .navbar {
-    position: sticky;
-    top: 0;
+  nav {
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: 1280px;
     z-index: 100;
-    height: var(--nav-h);
     background: rgba(255,255,255,0.88);
-    backdrop-filter: blur(20px) saturate(1.6);
-    -webkit-backdrop-filter: blur(20px) saturate(1.6);
-    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    padding: 12px 20px;
     display: flex;
     align-items: center;
-    padding: 0 24px;
-    gap: 16px;
+    gap: 12px;
   }
 
   .nav-logo {
@@ -73,1605 +81,1803 @@
     align-items: center;
     gap: 10px;
     flex-shrink: 0;
-    text-decoration: none;
   }
 
   .nav-logo-mark {
     width: 34px;
     height: 34px;
-    background: linear-gradient(135deg, #4F7CFF 0%, #7C3AED 100%);
+    background: linear-gradient(135deg, #4F7CFF 0%, #6B8FFF 100%);
     border-radius: 9px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: -0.5px;
+    box-shadow: 0 2px 8px rgba(79,124,255,0.30);
   }
 
-  .nav-logo-mark svg { width: 18px; height: 18px; fill: white; }
-
-  .nav-logo-text { display: flex; flex-direction: column; }
-  .nav-logo-title { font-size: 14px; font-weight: 700; color: var(--text-primary); line-height: 1.1; letter-spacing: -0.3px; }
-  .nav-logo-sub { font-size: 10px; font-weight: 500; color: var(--text-secondary); letter-spacing: 0.2px; }
+  .nav-logo-text { line-height: 1.1; }
+  .nav-logo-text span:first-child {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-900);
+    letter-spacing: -0.3px;
+  }
+  .nav-logo-text span:last-child {
+    display: block;
+    font-size: 11px;
+    color: var(--gray-400);
+    font-weight: 400;
+  }
 
   .nav-spacer { flex: 1; }
 
-  .nav-select {
-    height: 34px;
-    padding: 0 12px;
-    border: 1px solid var(--border2);
-    border-radius: 9px;
-    background: var(--surface);
-    font-family: var(--font);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-primary);
-    cursor: pointer;
-    outline: none;
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    padding-right: 28px;
-    display: none;
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
-  @media (min-width: 640px) { .nav-select { display: block; } }
+  .nav-select {
+    background: var(--gray-50);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px 28px 6px 10px;
+    font-size: 12.5px;
+    color: var(--gray-700);
+    font-family: inherit;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Cpolyline points='6,9 12,15 18,9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+  }
 
   .live-badge {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 5px 10px;
+    gap: 5px;
+    background: var(--emerald-soft);
+    border: 1px solid var(--emerald-mid);
     border-radius: 20px;
-    background: var(--green-light);
-    border: 1px solid rgba(16,185,129,0.2);
-    font-size: 12px;
-    font-weight: 600;
-    color: #059669;
+    padding: 4px 10px;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #065F46;
     white-space: nowrap;
   }
 
   .live-dot {
-    width: 7px;
-    height: 7px;
-    background: var(--green);
+    width: 6px; height: 6px;
     border-radius: 50%;
-    animation: pulse 2s ease infinite;
+    background: var(--emerald);
+    animation: pulse-green 2s ease-in-out infinite;
+    flex-shrink: 0;
   }
 
-  @keyframes pulse {
+  @keyframes pulse-green {
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.6; transform: scale(0.85); }
   }
 
-  .nav-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 9px;
+  .nav-icon-btn {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: var(--gray-50);
+    border: 1px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    border: 1px solid var(--border2);
-    background: var(--surface);
-    color: var(--text-secondary);
+    transition: all 0.2s ease;
     position: relative;
-    transition: background 0.2s;
+    flex-shrink: 0;
   }
 
-  .nav-icon:hover { background: var(--surface2); }
+  .nav-icon-btn:hover { background: var(--white); box-shadow: var(--shadow-xs); }
 
-  .nav-icon svg { width: 18px; height: 18px; }
+  .nav-icon-btn svg { width: 17px; height: 17px; stroke: var(--gray-500); }
 
   .notif-dot {
     position: absolute;
-    top: 7px;
-    right: 7px;
-    width: 7px;
-    height: 7px;
-    background: var(--blue);
+    top: 7px; right: 7px;
+    width: 7px; height: 7px;
+    background: #EF4444;
     border-radius: 50%;
-    border: 2px solid white;
+    border: 1.5px solid white;
   }
 
-  /* ── LAYOUT ── */
-  .main-layout {
-    display: flex;
-    min-height: calc(100vh - var(--nav-h));
-  }
-
-  /* ── SIDEBAR ── */
-  .sidebar {
-    width: 220px;
-    flex-shrink: 0;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    padding: 20px 12px;
-    position: sticky;
-    top: var(--nav-h);
-    height: calc(100vh - var(--nav-h));
-    overflow-y: auto;
-    display: none;
-  }
-
-  @media (min-width: 1024px) { .sidebar { display: block; } }
-
-  .sidebar-section-label {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--text-tertiary);
-    padding: 4px 12px;
-    margin: 16px 0 6px;
-  }
-
-  .sidebar-item {
+  .avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 9px 12px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-size: 13.5px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    transition: all 0.15s;
-    text-decoration: none;
-    margin-bottom: 2px;
-  }
-
-  .sidebar-item:hover { background: var(--surface2); color: var(--text-primary); }
-
-  .sidebar-item.active {
-    background: var(--blue-light);
-    color: var(--blue);
-  }
-
-  .sidebar-item svg { width: 18px; height: 18px; flex-shrink: 0; }
-
-  .sidebar-badge {
-    margin-left: auto;
-    background: var(--blue);
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
     color: white;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 20px;
-    min-width: 18px;
-    text-align: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
   }
 
-  /* ── CONTENT ── */
-  .content {
-    flex: 1;
-    min-width: 0;
-    padding: 28px 20px;
-    padding-bottom: calc(var(--bottom-nav-h) + 20px);
-  }
+  .avatar:hover { transform: scale(1.05); }
 
-  @media (min-width: 640px) {
-    .content { padding: 32px 28px; padding-bottom: calc(var(--bottom-nav-h) + 20px); }
-  }
-
-  @media (min-width: 1024px) {
-    .content { padding: 36px 40px; padding-bottom: 40px; }
+  /* ── MAIN LAYOUT ── */
+  .page-wrap {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
 
   /* ── HERO ── */
   .hero {
+    padding: 120px 0 60px;
+    text-align: center;
     position: relative;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-xl);
-    padding: 40px 32px;
-    margin-bottom: 28px;
     overflow: hidden;
   }
 
-  .hero-bg-blob {
+  .hero-bg {
     position: absolute;
-    border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.12;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 900px; height: 400px;
+    background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(79,124,255,0.08) 0%, transparent 70%);
     pointer-events: none;
   }
 
-  .hero-bg-blob-1 {
-    width: 300px;
-    height: 300px;
-    background: #4F7CFF;
-    top: -80px;
-    right: -60px;
-  }
-
-  .hero-bg-blob-2 {
-    width: 200px;
-    height: 200px;
-    background: #7C3AED;
-    bottom: -60px;
-    right: 100px;
-  }
-
-  .hero-badge {
+  .hero-eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 5px 12px;
-    border-radius: 20px;
-    background: var(--blue-light);
+    background: var(--blue-soft);
     border: 1px solid var(--blue-mid);
-    font-size: 11.5px;
-    font-weight: 600;
-    color: var(--blue);
-    margin-bottom: 16px;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #3558E8;
+    margin-bottom: 28px;
   }
 
-  .hero-badge svg { width: 13px; height: 13px; }
-
-  .hero h1 {
-    font-family: var(--serif);
-    font-size: clamp(26px, 5vw, 44px);
+  .hero-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: clamp(36px, 6vw, 68px);
     font-weight: 400;
-    font-style: italic;
-    color: var(--text-primary);
-    line-height: 1.15;
-    letter-spacing: -0.5px;
-    margin-bottom: 10px;
+    color: var(--gray-900);
+    letter-spacing: -1.5px;
+    line-height: 1.08;
+    margin-bottom: 20px;
   }
 
-  .hero p {
-    font-size: 15px;
-    color: var(--text-secondary);
-    line-height: 1.6;
+  .hero-title em {
+    font-style: italic;
+    color: var(--blue);
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--gray-500);
     max-width: 520px;
-    margin-bottom: 24px;
+    margin: 0 auto 40px;
+    font-weight: 400;
+    line-height: 1.65;
   }
 
   .hero-actions {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
     flex-wrap: wrap;
   }
 
   .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 10px 20px;
-    background: var(--blue);
+    background: var(--gray-900);
     color: white;
     border: none;
     border-radius: var(--radius-sm);
-    font-family: var(--font);
-    font-size: 13.5px;
-    font-weight: 600;
+    padding: 13px 26px;
+    font-size: 14.5px;
+    font-weight: 500;
+    font-family: inherit;
     cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-    box-shadow: 0 2px 8px rgba(79,124,255,0.35);
-  }
-
-  .btn-primary:hover { background: #3D6AEF; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(79,124,255,0.4); }
-  .btn-primary svg { width: 15px; height: 15px; }
-
-  .btn-ghost {
+    transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    padding: 10px 20px;
-    background: transparent;
-    color: var(--text-primary);
-    border: 1px solid var(--border2);
-    border-radius: var(--radius-sm);
-    font-family: var(--font);
-    font-size: 13.5px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(17,24,39,0.18);
+    text-decoration: none;
   }
 
-  .btn-ghost:hover { background: var(--surface2); }
+  .btn-primary:hover { background: var(--gray-700); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(17,24,39,0.22); }
 
-  /* ── SECTION HEADER ── */
-  .section-header {
+  .btn-secondary {
+    background: var(--white);
+    color: var(--gray-700);
+    border: 1px solid var(--border-med);
+    border-radius: var(--radius-sm);
+    padding: 12px 24px;
+    font-size: 14.5px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: var(--shadow-xs);
+    text-decoration: none;
+  }
+
+  .btn-secondary:hover { background: var(--gray-50); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    padding: 0 0 60px;
+  }
+
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-xs);
+    transition: all 0.22s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue) 0%, #8FA8FF 100%);
+    opacity: 0;
+    transition: opacity 0.22s ease;
+  }
+
+  .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .stat-card:hover::before { opacity: 1; }
+
+  .stat-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+
+  .stat-icon svg { width: 19px; height: 19px; }
+  .stat-icon.blue { background: var(--blue-soft); }
+  .stat-icon.blue svg { stroke: var(--blue); }
+  .stat-icon.green { background: var(--emerald-soft); }
+  .stat-icon.green svg { stroke: var(--emerald); }
+  .stat-icon.amber { background: var(--amber-soft); }
+  .stat-icon.amber svg { stroke: var(--amber); }
+  .stat-icon.red { background: var(--red-soft); }
+  .stat-icon.red svg { stroke: var(--red); }
+
+  .stat-label { font-size: 12.5px; color: var(--gray-400); font-weight: 400; margin-bottom: 6px; }
+  .stat-value { font-size: 28px; font-weight: 600; color: var(--gray-900); letter-spacing: -0.8px; line-height: 1; margin-bottom: 8px; }
+  .stat-growth {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #059669;
+    background: var(--emerald-soft);
+    border-radius: 6px;
+    padding: 2px 8px;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-head {
+    display: flex;
+    align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-    gap: 8px;
+    margin-bottom: 24px;
+    gap: 12px;
   }
 
   .section-title {
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: -0.3px;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gray-900);
+    letter-spacing: -0.5px;
   }
 
   .section-sub {
-    font-size: 13px;
-    color: var(--text-secondary);
-    margin-top: 2px;
+    font-size: 13.5px;
+    color: var(--gray-400);
+    margin-top: 3px;
   }
 
-  .view-all {
+  .see-all {
     font-size: 13px;
-    font-weight: 600;
     color: var(--blue);
-    cursor: pointer;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .view-all svg { width: 14px; height: 14px; }
-
-  /* ── ANALYTICS GRID ── */
-  .analytics-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 28px;
-  }
-
-  @media (min-width: 768px) {
-    .analytics-grid { grid-template-columns: repeat(4, 1fr); }
-  }
-
-  .analytics-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 18px 16px;
-    transition: all 0.2s;
-    cursor: default;
-    animation: fadeUp 0.5s ease both;
-  }
-
-  .analytics-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--border2);
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .analytics-card:nth-child(1) { animation-delay: 0.05s; }
-  .analytics-card:nth-child(2) { animation-delay: 0.1s; }
-  .analytics-card:nth-child(3) { animation-delay: 0.15s; }
-  .analytics-card:nth-child(4) { animation-delay: 0.2s; }
-
-  .analytics-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-  }
-
-  .analytics-icon svg { width: 18px; height: 18px; }
-
-  .analytics-value {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: -0.8px;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
-  .analytics-label {
-    font-size: 12.5px;
-    color: var(--text-secondary);
     font-weight: 500;
-    margin-bottom: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+    text-decoration: none;
+    background: none;
+    border: none;
+    font-family: inherit;
   }
+  .see-all:hover { opacity: 0.7; }
 
-  .analytics-growth {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #059669;
-    background: var(--green-light);
-    border-radius: 6px;
-    padding: 2px 7px;
-  }
+  /* ── SECTION SPACING ── */
+  section { padding: 0 0 64px; }
 
-  .analytics-growth svg { width: 11px; height: 11px; }
-
-  /* ── AUTOMATION GRID ── */
-  .automation-grid {
+  /* ── FEATURE CARDS ── */
+  .features-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-    margin-bottom: 28px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
   }
 
-  @media (min-width: 640px) {
-    .automation-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  @media (min-width: 1200px) {
-    .automation-grid { grid-template-columns: repeat(4, 1fr); }
-  }
-
-  .automation-card {
-    background: var(--surface);
+  .feature-card {
+    background: var(--white);
     border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 20px 18px;
-    transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-    animation: fadeUp 0.5s ease both;
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-xs);
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
 
-  .automation-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, transparent 60%, rgba(79,124,255,0.03) 100%);
-    border-radius: inherit;
-    pointer-events: none;
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(79,124,255,0.10), 0 4px 16px rgba(0,0,0,0.05);
+    border-color: rgba(79,124,255,0.20);
   }
 
-  .automation-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    border-color: rgba(79,124,255,0.2);
-  }
-
-  .automation-card:hover::before {
-    background: linear-gradient(135deg, transparent 40%, rgba(79,124,255,0.05) 100%);
-  }
-
-  .automation-card-header {
+  .fc-top {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
   }
 
-  .automation-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 11px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .fc-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: var(--blue-soft);
+    display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
   }
 
-  .automation-icon svg { width: 20px; height: 20px; }
+  .fc-icon svg { width: 20px; height: 20px; stroke: var(--blue); }
 
-  /* Toggle Switch */
+  /* Toggle */
   .toggle {
     position: relative;
-    width: 42px;
-    height: 24px;
+    width: 42px; height: 24px;
     flex-shrink: 0;
   }
 
-  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle input { display: none; }
 
   .toggle-track {
-    position: absolute;
-    inset: 0;
-    background: #D1D5DB;
-    border-radius: 20px;
+    width: 42px; height: 24px;
+    border-radius: 12px;
+    background: var(--gray-200);
     cursor: pointer;
-    transition: background 0.25s;
+    transition: background 0.25s ease;
+    display: block;
   }
 
   .toggle input:checked + .toggle-track { background: var(--blue); }
 
   .toggle-thumb {
     position: absolute;
-    width: 18px;
-    height: 18px;
-    background: white;
+    top: 3px; left: 3px;
+    width: 18px; height: 18px;
     border-radius: 50%;
-    top: 3px;
-    left: 3px;
+    background: white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
     transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
     pointer-events: none;
   }
 
   .toggle input:checked ~ .toggle-thumb { transform: translateX(18px); }
 
-  .automation-title {
-    font-size: 13.5px;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 5px;
-    line-height: 1.3;
+  .fc-title {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 6px;
     letter-spacing: -0.2px;
   }
 
-  .automation-desc {
-    font-size: 12px;
-    color: var(--text-secondary);
-    line-height: 1.5;
-  }
-
-  /* ── PATIENTS TABLE ── */
-  .patients-table-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    margin-bottom: 28px;
-  }
-
-  .patients-toolbar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
-  }
-
-  .search-input {
-    flex: 1;
-    min-width: 180px;
-    height: 34px;
-    padding: 0 12px 0 34px;
-    border: 1px solid var(--border2);
-    border-radius: 9px;
-    background: var(--bg);
-    font-family: var(--font);
+  .fc-desc {
     font-size: 13px;
-    color: var(--text-primary);
-    outline: none;
-    position: relative;
+    color: var(--gray-400);
+    line-height: 1.55;
   }
 
-  .search-input:focus { border-color: var(--blue); background: var(--surface); }
-
-  .search-wrap { position: relative; flex: 1; min-width: 180px; }
-
-  .search-icon {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-tertiary);
-    pointer-events: none;
-  }
-
-  .search-icon svg { width: 15px; height: 15px; }
-
-  .filter-btn {
-    height: 34px;
-    padding: 0 14px;
-    border: 1px solid var(--border2);
-    border-radius: 9px;
-    background: var(--surface);
-    font-family: var(--font);
-    font-size: 12.5px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    cursor: pointer;
+  .fc-status {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--gray-100);
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: all 0.15s;
-    white-space: nowrap;
+    font-size: 12px;
+    color: var(--gray-400);
   }
 
-  .filter-btn svg { width: 14px; height: 14px; }
-  .filter-btn:hover { background: var(--surface2); color: var(--text-primary); }
+  .fc-status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--gray-300);
+    flex-shrink: 0;
+  }
 
-  .patients-list { overflow-x: auto; }
+  .fc-status-dot.active { background: var(--emerald); box-shadow: 0 0 0 3px rgba(16,185,129,0.15); }
+
+  /* ── PATIENTS ── */
+  .patients-list {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
 
   .patient-row {
     display: flex;
     align-items: center;
-    padding: 12px 18px;
-    border-bottom: 1px solid var(--border);
-    gap: 12px;
-    transition: background 0.15s;
-    min-width: 600px;
+    gap: 14px;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--gray-50);
+    transition: background 0.15s ease;
   }
 
   .patient-row:last-child { border-bottom: none; }
-  .patient-row:hover { background: var(--bg); }
+  .patient-row:hover { background: var(--gray-50); }
 
-  .patient-avatar {
-    width: 36px;
-    height: 36px;
+  .pat-avatar {
+    width: 40px; height: 40px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-
-  .patient-info { flex: 1; min-width: 0; }
-
-  .patient-name {
-    font-size: 13.5px;
+    font-size: 14px;
     font-weight: 600;
-    color: var(--text-primary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .patient-phone {
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin-top: 1px;
-  }
-
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 9px;
-    border-radius: 20px;
-    font-size: 11.5px;
-    font-weight: 600;
-    white-space: nowrap;
+    color: white;
     flex-shrink: 0;
+    font-family: inherit;
   }
 
-  .status-confirmed { background: var(--green-light); color: #059669; }
-  .status-pending { background: var(--amber-light); color: #D97706; }
-  .status-missed { background: var(--red-light); color: #DC2626; }
-  .status-followup { background: var(--blue-light); color: var(--blue); }
+  .pat-info { flex: 1; min-width: 0; }
+  .pat-name { font-size: 14px; font-weight: 600; color: var(--gray-900); }
+  .pat-phone { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
 
-  .patient-actions {
+  .pat-badges {
     display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .badge {
+    font-size: 11.5px;
+    font-weight: 500;
+    border-radius: 7px;
+    padding: 3px 9px;
+    white-space: nowrap;
+  }
+
+  .badge-blue { background: var(--blue-soft); color: #3558E8; }
+  .badge-green { background: var(--emerald-soft); color: #065F46; }
+  .badge-amber { background: var(--amber-soft); color: #92400E; }
+  .badge-red { background: var(--red-soft); color: #991B1B; }
+  .badge-gray { background: var(--gray-100); color: var(--gray-600); }
+
+  .pat-actions {
+    display: flex;
+    align-items: center;
     gap: 6px;
     flex-shrink: 0;
   }
 
   .action-btn {
-    height: 28px;
-    padding: 0 10px;
-    border: 1px solid var(--border2);
-    border-radius: 7px;
-    background: var(--surface);
-    font-family: var(--font);
-    font-size: 11px;
-    font-weight: 600;
+    border: 1px solid var(--border-med);
+    background: var(--white);
+    border-radius: 8px;
+    padding: 5px 11px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gray-600);
     cursor: pointer;
-    color: var(--text-secondary);
-    transition: all 0.15s;
+    font-family: inherit;
+    transition: all 0.15s ease;
     white-space: nowrap;
   }
 
-  .action-btn:hover { background: var(--blue-light); color: var(--blue); border-color: var(--blue-mid); }
+  .action-btn:hover {
+    background: var(--blue-soft);
+    border-color: var(--blue-mid);
+    color: var(--blue);
+  }
+
+  /* ── ANALYTICS ── */
+  .analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .analytics-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    box-shadow: var(--shadow-xs);
+    transition: all 0.22s ease;
+    position: relative;
+  }
+
+  .analytics-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+
+  .ac-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .ac-label { font-size: 12.5px; color: var(--gray-400); font-weight: 400; }
+
+  .ac-value {
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--gray-900);
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .ac-bar-wrap {
+    height: 4px;
+    background: var(--gray-100);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .ac-bar {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--blue), #8FA8FF);
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .ac-bar.green { background: linear-gradient(90deg, var(--emerald), #6EE7B7); }
+
+  .ac-growth {
+    font-size: 11.5px;
+    color: #059669;
+    font-weight: 500;
+  }
+
+  /* Mini sparkline chart */
+  .sparkline { display: flex; align-items: flex-end; gap: 3px; height: 32px; }
+  .spark-bar {
+    flex: 1;
+    background: var(--blue-soft);
+    border-radius: 3px 3px 0 0;
+    min-height: 4px;
+    transition: background 0.2s;
+  }
+  .spark-bar:hover { background: var(--blue-mid); }
+  .spark-bar.green-bar { background: var(--emerald-soft); }
+  .spark-bar.green-bar:hover { background: var(--emerald-mid); }
 
   /* ── PRICING ── */
   .pricing-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 14px;
-    margin-bottom: 28px;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 16px;
+    align-items: start;
   }
 
-  @media (min-width: 720px) {
-    .pricing-grid { grid-template-columns: repeat(3, 1fr); }
-  }
-
-  .pricing-card {
-    background: var(--surface);
+  .price-card {
+    background: var(--white);
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 26px 22px;
+    border-radius: var(--radius-xl);
+    padding: 30px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.25s ease;
     position: relative;
-    transition: all 0.2s;
-    animation: fadeUp 0.5s ease both;
+    overflow: hidden;
   }
 
-  .pricing-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
+  .price-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+  .price-card.featured {
+    border: 2px solid var(--blue);
+    box-shadow: 0 0 0 4px rgba(79,124,255,0.07), var(--shadow-md);
   }
 
-  .pricing-card.featured {
-    border-color: var(--blue);
-    border-width: 2px;
-    box-shadow: 0 0 0 4px rgba(79,124,255,0.06);
+  .price-card.scale-card {
+    background: var(--gray-900);
+    border-color: var(--gray-700);
   }
 
-  .pricing-popular-badge {
+  .popular-badge {
     position: absolute;
-    top: -11px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 20px; right: 20px;
     background: var(--blue);
     color: white;
-    font-size: 10.5px;
-    font-weight: 700;
-    padding: 3px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
     border-radius: 20px;
-    white-space: nowrap;
     letter-spacing: 0.2px;
   }
 
-  .pricing-tier {
-    font-size: 11.5px;
-    font-weight: 700;
-    text-transform: uppercase;
+  .price-plan {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--gray-400);
     letter-spacing: 0.8px;
-    color: var(--text-tertiary);
+    text-transform: uppercase;
     margin-bottom: 6px;
   }
 
-  .pricing-price {
-    font-size: 32px;
-    font-weight: 800;
-    color: var(--text-primary);
-    letter-spacing: -1px;
-    line-height: 1;
-    margin-bottom: 4px;
+  .scale-card .price-plan { color: var(--gray-500); }
+
+  .price-tagline {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-bottom: 22px;
+    line-height: 1.45;
   }
 
-  .pricing-price span { font-size: 16px; font-weight: 600; color: var(--text-secondary); }
-  .pricing-desc { font-size: 12.5px; color: var(--text-secondary); margin-bottom: 18px; line-height: 1.5; }
+  .scale-card .price-tagline { color: var(--gray-400); }
 
-  .pricing-features { list-style: none; margin-bottom: 20px; }
+  .price-amount {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    margin-bottom: 24px;
+  }
 
-  .pricing-feature {
+  .price-currency { font-size: 20px; font-weight: 500; color: var(--gray-600); }
+  .scale-card .price-currency { color: var(--gray-400); }
+
+  .price-num {
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--gray-900);
+    letter-spacing: -2px;
+    line-height: 1;
+  }
+
+  .scale-card .price-num { color: white; }
+
+  .price-per { font-size: 14px; color: var(--gray-400); align-self: flex-end; padding-bottom: 4px; }
+
+  .price-features {
+    list-style: none;
+    margin-bottom: 28px;
+  }
+
+  .price-features li {
     display: flex;
     align-items: flex-start;
-    gap: 8px;
-    font-size: 13px;
-    color: var(--text-secondary);
-    padding: 5px 0;
-    border-bottom: 1px solid var(--border);
+    gap: 9px;
+    font-size: 13.5px;
+    color: var(--gray-600);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--gray-50);
   }
 
-  .pricing-feature:last-child { border-bottom: none; }
+  .price-features li:last-child { border-bottom: none; }
+  .scale-card .price-features li { color: var(--gray-400); border-bottom-color: rgba(255,255,255,0.05); }
 
-  .pricing-check {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--green-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .check-icon {
+    width: 18px; height: 18px;
     flex-shrink: 0;
+    background: var(--emerald-soft);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
     margin-top: 1px;
   }
 
-  .pricing-check svg { width: 10px; height: 10px; color: var(--green); }
+  .check-icon svg { width: 10px; height: 10px; stroke: var(--emerald); }
+  .scale-card .check-icon { background: rgba(16,185,129,0.15); }
 
-  .btn-pricing {
+  .price-cta {
     width: 100%;
-    padding: 11px;
+    padding: 13px;
     border-radius: var(--radius-sm);
-    font-family: var(--font);
-    font-size: 13.5px;
-    font-weight: 700;
+    font-size: 14.5px;
+    font-weight: 600;
+    font-family: inherit;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
     text-align: center;
-    border: none;
   }
 
-  .btn-pricing-outline {
+  .cta-outline {
     background: transparent;
-    border: 1.5px solid var(--border2);
-    color: var(--text-primary);
+    border: 1.5px solid var(--gray-200);
+    color: var(--gray-700);
   }
 
-  .btn-pricing-outline:hover { background: var(--surface2); }
+  .cta-outline:hover { border-color: var(--gray-400); background: var(--gray-50); }
 
-  .btn-pricing-solid {
+  .cta-blue {
     background: var(--blue);
+    border: none;
     color: white;
-    box-shadow: 0 2px 8px rgba(79,124,255,0.35);
+    box-shadow: 0 3px 12px rgba(79,124,255,0.35);
   }
 
-  .btn-pricing-solid:hover { background: #3D6AEF; transform: translateY(-1px); }
+  .cta-blue:hover { background: #3D6BEF; transform: translateY(-1px); box-shadow: 0 5px 18px rgba(79,124,255,0.4); }
+
+  .cta-white {
+    background: white;
+    border: none;
+    color: var(--gray-900);
+  }
+
+  .cta-white:hover { background: var(--gray-100); }
+
+  .price-footer {
+    text-align: center;
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--gray-400);
+  }
+
+  .price-footer a { color: var(--blue); text-decoration: none; font-weight: 500; }
 
   /* ── BOTTOM NAV ── */
   .bottom-nav {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: var(--bottom-nav-h);
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
     background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(20px) saturate(1.6);
-    -webkit-backdrop-filter: blur(20px) saturate(1.6);
-    border-top: 1px solid var(--border);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--border);
+    border-radius: 26px;
+    box-shadow: var(--shadow-lg), 0 0 0 0.5px rgba(0,0,0,0.04);
+    padding: 10px 16px;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    padding: 0 8px;
-    z-index: 99;
+    gap: 4px;
+    z-index: 100;
   }
 
-  @media (min-width: 1024px) { .bottom-nav { display: none; } }
-
-  .bnav-item {
+  .bn-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 3px;
-    padding: 6px 14px;
-    border-radius: var(--radius-sm);
+    padding: 8px 16px;
+    border-radius: 18px;
     cursor: pointer;
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--text-tertiary);
-    transition: color 0.15s;
-    flex: 1;
-    max-width: 80px;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: none;
+    background: none;
+    font-family: inherit;
   }
 
-  .bnav-item.active { color: var(--blue); }
-  .bnav-item svg { width: 22px; height: 22px; }
+  .bn-item:hover { background: var(--gray-50); }
 
-  .bnav-fab {
-    width: 52px;
-    height: 52px;
-    border-radius: 18px;
-    background: var(--blue);
+  .bn-item.active { background: var(--blue-soft); }
+
+  .bn-item svg { width: 21px; height: 21px; stroke: var(--gray-400); transition: stroke 0.2s; }
+  .bn-item.active svg { stroke: var(--blue); }
+
+  .bn-label { font-size: 10.5px; font-weight: 500; color: var(--gray-400); transition: color 0.2s; }
+  .bn-item.active .bn-label { color: var(--blue); }
+
+  .bn-fab {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--gray-900);
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 4px 16px rgba(79,124,255,0.4);
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 16px rgba(17,24,39,0.25);
     flex-shrink: 0;
-    margin: 0 4px;
-    transition: all 0.2s;
+    margin: 0 6px;
   }
 
-  .bnav-fab:hover { transform: scale(1.05); }
-  .bnav-fab svg { width: 24px; height: 24px; color: white; }
+  .bn-fab:hover { background: var(--gray-700); transform: scale(1.06); box-shadow: 0 6px 24px rgba(17,24,39,0.30); }
+  .bn-fab:active { transform: scale(0.95); }
+  .bn-fab svg { width: 22px; height: 22px; stroke: white; }
 
-  /* ── CHART MINI ── */
-  .sparkline-wrap { height: 36px; margin-top: 10px; }
-  .sparkline { width: 100%; height: 100%; }
-
-  /* ── UTILITY ── */
-  .mb-20 { margin-bottom: 20px; }
-  .mb-28 { margin-bottom: 28px; }
-
-  .tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 9px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    background: var(--surface2);
-    color: var(--text-secondary);
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 10px 14px; gap: 8px; }
+    .nav-select { display: none; }
+    .hero { padding: 100px 0 40px; }
+    .hero-sub { font-size: 15px; }
+    .stat-card { padding: 18px; }
+    .stat-value { font-size: 24px; }
+    .features-grid { grid-template-columns: 1fr; gap: 10px; }
+    .pat-badges { display: none; }
+    .pat-actions { gap: 4px; }
+    .action-btn { padding: 5px 9px; font-size: 11.5px; }
+    .analytics-grid { grid-template-columns: repeat(2, 1fr); }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .bottom-nav { padding: 8px 10px; gap: 0; }
+    .bn-item { padding: 8px 12px; }
+    .live-badge { display: none; }
+    .page-wrap { padding: 0 14px; }
   }
 
-  /* ── MINI CHART BAR ── */
-  .bar-chart {
+  @media (max-width: 480px) {
+    .hero-title { font-size: 32px; }
+    .analytics-grid { grid-template-columns: 1fr; }
+    .pat-phone { display: none; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in { animation: fadeInUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .fade-in-1 { animation-delay: 0.05s; }
+  .fade-in-2 { animation-delay: 0.12s; }
+  .fade-in-3 { animation-delay: 0.20s; }
+  .fade-in-4 { animation-delay: 0.28s; }
+  .fade-in-5 { animation-delay: 0.36s; }
+
+  .fc-on { background: var(--blue-soft); }
+  .fc-on svg { stroke: var(--blue); }
+
+  /* Pending attention cards */
+  .attention-strip {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--blue);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
     display: flex;
-    align-items: flex-end;
-    gap: 3px;
-    height: 32px;
-    margin-top: 8px;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow-xs);
+    transition: all 0.18s ease;
+    cursor: pointer;
   }
 
-  .bar {
-    flex: 1;
-    border-radius: 3px 3px 0 0;
-    background: var(--blue-mid);
-    transition: background 0.2s;
+  .attention-strip:hover { background: var(--blue-soft); }
+  .attention-strip.amber { border-left-color: var(--amber); }
+  .attention-strip.amber:hover { background: var(--amber-soft); }
+  .attention-strip.green { border-left-color: var(--emerald); }
+  .attention-strip.green:hover { background: var(--emerald-soft); }
+
+  .att-icon { flex-shrink: 0; }
+  .att-icon svg { width: 18px; height: 18px; stroke: var(--blue); }
+  .attention-strip.amber .att-icon svg { stroke: var(--amber); }
+  .attention-strip.green .att-icon svg { stroke: var(--emerald); }
+
+  .att-text { flex: 1; }
+  .att-title { font-size: 13.5px; font-weight: 600; color: var(--gray-800); }
+  .att-sub { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+
+  .att-cta {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--blue);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 5px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--blue-mid);
+    transition: all 0.15s ease;
   }
 
-  .bar.highlight { background: var(--blue); }
+  .att-cta:hover { background: var(--blue); color: white; }
 
-  /* ── FADE IN ── */
-  .fade-in {
-    animation: fadeUp 0.6s ease both;
+  .section-two-col {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 20px;
   }
+
+  @media (max-width: 900px) {
+    .section-two-col { grid-template-columns: 1fr; }
+  }
+
+  .sidebar-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+
+  .sc-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--gray-50);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-800);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .sc-body { padding: 12px 16px; }
+
+  .activity-item {
+    display: flex;
+    gap: 11px;
+    padding: 9px 4px;
+    border-bottom: 1px solid var(--gray-50);
+  }
+
+  .activity-item:last-child { border-bottom: none; }
+
+  .act-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .act-text { font-size: 12.5px; color: var(--gray-600); line-height: 1.45; }
+  .act-time { font-size: 11px; color: var(--gray-300); margin-top: 3px; }
+
+  /* Footer bottom padding */
+  .page-bottom { height: 90px; }
+
+  /* Subtle grid texture */
+  .page-texture {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(79,124,255,0.012) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,124,255,0.012) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrap { position: relative; z-index: 1; }
 </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-  <a class="nav-logo" href="#">
-    <div class="nav-logo-mark">
-      <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-        <path d="M9 1.5C5.96 1.5 3.5 3.96 3.5 7c0 1.68.76 3.18 1.95 4.2L4.5 14.5l3.1-1.55C8.09 13.13 8.54 13.2 9 13.2c3.04 0 5.5-2.46 5.5-5.5S12.04 1.5 9 1.5z" opacity=".4"/>
-        <path d="M9 2.5C6.51 2.5 4.5 4.51 4.5 7s2.01 4.5 4.5 4.5c.56 0 1.09-.1 1.59-.28l2.91 1.28-.85-2.78C12.86 8.92 13.5 8.02 13.5 7c0-2.49-2.01-4.5-4.5-4.5z"/>
-      </svg>
-    </div>
+<div class="page-texture" aria-hidden="true"></div>
+
+<!-- ── NAVBAR ── -->
+<nav aria-label="Main navigation">
+  <div class="nav-logo">
+    <div class="nav-logo-mark">A</div>
     <div class="nav-logo-text">
-      <span class="nav-logo-title">AuraScale OS</span>
-      <span class="nav-logo-sub">WhatsApp Retention Engine</span>
+      <span>AuraScale OS</span>
+      <span>WhatsApp Retention Engine</span>
     </div>
-  </a>
+  </div>
 
   <div class="nav-spacer"></div>
 
-  <select class="nav-select">
-    <option>🏥 Apollo Dental, Kolkata</option>
-    <option>🏥 Sunrise Clinic, Howrah</option>
-    <option>🏥 City Diagnostics</option>
-  </select>
+  <div class="nav-controls">
+    <select class="nav-select" aria-label="Select clinic">
+      <option>🏥 Dr. Mehta Clinic</option>
+      <option>🦷 Smile Dental</option>
+      <option>🔬 HealthScan Labs</option>
+    </select>
 
-  <select class="nav-select">
-    <option>🇮🇳 India</option>
-    <option>🇦🇪 UAE</option>
-    <option>🇺🇸 USA</option>
-  </select>
+    <select class="nav-select" aria-label="Select market">
+      <option>🇮🇳 India</option>
+      <option>🌐 Global</option>
+    </select>
 
-  <div class="live-badge">
-    <div class="live-dot"></div>
-    Live
-  </div>
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      Live
+    </div>
 
-  <div class="nav-icon">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-      <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-    </svg>
-    <div class="notif-dot"></div>
+    <button class="nav-icon-btn" aria-label="Notifications">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <div class="notif-dot"></div>
+    </button>
+
+    <div class="avatar" role="button" aria-label="Profile menu" tabindex="0">DR</div>
   </div>
 </nav>
 
-<!-- MAIN LAYOUT -->
-<div class="main-layout">
+<!-- ── MAIN ── -->
+<main>
+<div class="page-wrap">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sidebar-section-label">Main</div>
+  <!-- HERO -->
+  <div class="hero fade-in">
+    <div class="hero-bg" aria-hidden="true"></div>
 
-    <a class="sidebar-item active" href="#">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect>
-        <rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
-      </svg>
-      Dashboard
-    </a>
-
-    <a class="sidebar-item" href="#">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-      </svg>
-      Patients
-      <span class="sidebar-badge">128</span>
-    </a>
-
-    <a class="sidebar-item" href="#">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-      </svg>
-      Automation
-    </a>
-
-    <a class="sidebar-item" href="#">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
-        <line x1="6" y1="20" x2="6" y2="14"/>
-      </svg>
-      Reports
-    </a>
-
-    <a class="sidebar-item" href="#">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-      </svg>
-      Broadcasts
-      <span class="sidebar-badge">3</span>
-    </a>
-
-    <div class="sidebar-section-label">Settings</div>
-
-    <a class="sidebar-item" href="#">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
-      </svg>
-      Integrations
-    </a>
-
-    <a class="sidebar-item" href="#">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-      </svg>
-      Settings
-    </a>
-  </aside>
-
-  <!-- MAIN CONTENT -->
-  <main class="content">
-
-    <!-- HERO -->
-    <div class="hero fade-in" style="animation-delay:0.05s">
-      <div class="hero-bg-blob hero-bg-blob-1"></div>
-      <div class="hero-bg-blob hero-bg-blob-2"></div>
-
-      <div class="hero-badge">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-        </svg>
-        Automation Active · 8 Workflows Running
-      </div>
-
-      <h1>WhatsApp Retention Engine</h1>
-      <p>Manage patient communication and automation workflows. Keep your clinic thriving with intelligent reminders, follow-ups, and engagement tools.</p>
-
-      <div class="hero-actions">
-        <button class="btn-primary">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <polygon points="10,8 16,12 10,16 10,8"/>
-          </svg>
-          Run Broadcast
-        </button>
-        <button class="btn-ghost">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-          </svg>
-          Schedule
-        </button>
-      </div>
+    <div class="hero-eyebrow">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Powered by AI Automation
     </div>
 
-    <!-- ANALYTICS GRID -->
-    <div class="section-header mb-20">
-      <div>
-        <div class="section-title">Overview</div>
-        <div class="section-sub">Last 30 days · Apollo Dental</div>
-      </div>
-      <a class="view-all" href="#">
-        Full Report
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 18 15 12 9 6"/>
-        </svg>
+    <h1 class="hero-title">WhatsApp <em>Retention</em><br>Engine</h1>
+
+    <p class="hero-sub">Manage patient communication and automation workflows effortlessly. Trusted by 2,400+ healthcare practices.</p>
+
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">
+        Get Started Free
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
       </a>
+      <a href="#features" class="btn-secondary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5,3 19,12 5,21"/></svg>
+        Watch Demo
+      </a>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row fade-in fade-in-1" role="region" aria-label="Key metrics">
+    <div class="stat-card">
+      <div class="stat-icon blue">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="stat-label">Messages Sent</div>
+      <div class="stat-value">48,291</div>
+      <div class="stat-growth">↑ 23% this month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon green">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="stat-label">Returning Patients</div>
+      <div class="stat-value">1,847</div>
+      <div class="stat-growth">↑ 18% this month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon amber">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      </div>
+      <div class="stat-label">Reviews Generated</div>
+      <div class="stat-value">3,102</div>
+      <div class="stat-growth">↑ 41% this month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon green">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+      </div>
+      <div class="stat-label">Automation Rate</div>
+      <div class="stat-value">94.6%</div>
+      <div class="stat-growth">↑ 6% this month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon red">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <div class="stat-label">Missed Recovered</div>
+      <div class="stat-value">312</div>
+      <div class="stat-growth">↑ 29% this month</div>
+    </div>
+  </div>
+
+  <!-- ATTENTION + ACTIVITY -->
+  <section aria-labelledby="attention-heading">
+    <div class="section-two-col">
+      <div>
+        <div class="section-head">
+          <div>
+            <h2 class="section-title" id="attention-heading">Needs Attention</h2>
+            <div class="section-sub">Pending follow-ups and actions</div>
+          </div>
+          <button class="see-all">View all →</button>
+        </div>
+
+        <div class="attention-strip fade-in fade-in-2">
+          <div class="att-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.5 2 2 0 0 1 3.59 1.32h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.01 6.01l1.02-.93a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+          </div>
+          <div class="att-text">
+            <div class="att-title">14 patients haven't returned in 14+ days</div>
+            <div class="att-sub">Reactivation campaign ready to send</div>
+          </div>
+          <button class="att-cta">Send Now</button>
+        </div>
+
+        <div class="attention-strip amber fade-in fade-in-2">
+          <div class="att-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke="#F59E0B"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          </div>
+          <div class="att-text">
+            <div class="att-title">8 appointment confirmations pending</div>
+            <div class="att-sub">Tomorrow's schedule — 9 patients unconfirmed</div>
+          </div>
+          <button class="att-cta" style="color:var(--amber);border-color:rgba(245,158,11,0.3)">Confirm All</button>
+        </div>
+
+        <div class="attention-strip green fade-in fade-in-3">
+          <div class="att-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke="#10B981"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          </div>
+          <div class="att-text">
+            <div class="att-title">6 recent patients — review request ready</div>
+            <div class="att-sub">Completed visits in last 48 hours</div>
+          </div>
+          <button class="att-cta" style="color:var(--emerald);border-color:rgba(16,185,129,0.3)">Request Reviews</button>
+        </div>
+
+        <div class="attention-strip fade-in fade-in-3">
+          <div class="att-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="att-text">
+            <div class="att-title">3 missed appointment recovery messages queued</div>
+            <div class="att-sub">AI drafted personalized recall messages</div>
+          </div>
+          <button class="att-cta">Review & Send</button>
+        </div>
+      </div>
+
+      <!-- Activity Feed -->
+      <div class="sidebar-card fade-in fade-in-4">
+        <div class="sc-header">
+          Live Activity
+          <span style="font-size:11px;font-weight:400;color:var(--gray-400)">Real-time</span>
+        </div>
+        <div class="sc-body">
+          <div class="activity-item">
+            <div class="act-dot" style="background:var(--emerald)"></div>
+            <div>
+              <div class="act-text">Priya S. confirmed appointment via WhatsApp</div>
+              <div class="act-time">2 minutes ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-dot" style="background:var(--blue)"></div>
+            <div>
+              <div class="act-text">Review request sent to Anil Kumar — 5★ received</div>
+              <div class="act-time">11 minutes ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-dot" style="background:var(--amber)"></div>
+            <div>
+              <div class="act-text">48hr follow-up sent to 4 patients</div>
+              <div class="act-time">34 minutes ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-dot" style="background:var(--emerald)"></div>
+            <div>
+              <div class="act-text">AI Receptionist answered 3 patient queries</div>
+              <div class="act-time">1 hour ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-dot" style="background:var(--blue)"></div>
+            <div>
+              <div class="act-text">Broadcast campaign sent — 247 delivered</div>
+              <div class="act-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-dot" style="background:var(--gray-300)"></div>
+            <div>
+              <div class="act-text">Rohan M. rescheduled via automation flow</div>
+              <div class="act-time">3 hours ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-dot" style="background:var(--emerald)"></div>
+            <div>
+              <div class="act-text">14-day reminder recovered Sunita Patel</div>
+              <div class="act-time">Yesterday</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" aria-labelledby="features-heading">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title" id="features-heading">Automation Workflows</h2>
+        <div class="section-sub">Toggle automations on or off in one tap</div>
+      </div>
+      <button class="see-all">Manage all →</button>
+    </div>
+
+    <div class="features-grid">
+
+      <!-- 1 -->
+      <div class="feature-card fade-in fade-in-1">
+        <div class="fc-top">
+          <div class="fc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <label class="toggle" aria-label="Toggle Appointment Confirmation">
+            <input type="checkbox" checked>
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="fc-title">Appointment Confirmation</div>
+        <div class="fc-desc">Automatically confirms appointments 24 hours before visit via WhatsApp.</div>
+        <div class="fc-status">
+          <div class="fc-status-dot active"></div>
+          Active · 127 sent today
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="feature-card fade-in fade-in-1">
+        <div class="fc-top">
+          <div class="fc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <label class="toggle" aria-label="Toggle 14-Day Return Reminder">
+            <input type="checkbox" checked>
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="fc-title">14-Day Return Reminder</div>
+        <div class="fc-desc">Reconnects inactive patients automatically with a personalised message.</div>
+        <div class="fc-status">
+          <div class="fc-status-dot active"></div>
+          Active · 14 recovered this week
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="feature-card fade-in fade-in-2">
+        <div class="fc-top">
+          <div class="fc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          </div>
+          <label class="toggle" aria-label="Toggle Google Review Request">
+            <input type="checkbox" checked>
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="fc-title">Google Review Request</div>
+        <div class="fc-desc">Sends automated review request 2 hours after each patient visit.</div>
+        <div class="fc-status">
+          <div class="fc-status-dot active"></div>
+          Active · 62 reviews this month
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="feature-card fade-in fade-in-2">
+        <div class="fc-top">
+          <div class="fc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          </div>
+          <label class="toggle" aria-label="Toggle 48-Hour Follow-Up">
+            <input type="checkbox" checked>
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="fc-title">48-Hour Follow-Up</div>
+        <div class="fc-desc">Sends a warm follow-up WhatsApp message 48 hours after every visit.</div>
+        <div class="fc-status">
+          <div class="fc-status-dot active"></div>
+          Active · 38 sent today
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="feature-card fade-in fade-in-3">
+        <div class="fc-top">
+          <div class="fc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
+          </div>
+          <label class="toggle" aria-label="Toggle WhatsApp Broadcast Campaigns">
+            <input type="checkbox">
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="fc-title">WhatsApp Broadcast Campaigns</div>
+        <div class="fc-desc">Send educational and promotional campaigns to your entire patient list.</div>
+        <div class="fc-status">
+          <div class="fc-status-dot"></div>
+          Paused · Next: Mon 9:00 AM
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="feature-card fade-in fade-in-3">
+        <div class="fc-top">
+          <div class="fc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><circle cx="12" cy="10" r="2" fill="rgba(79,124,255,0.15)"/></svg>
+          </div>
+          <label class="toggle" aria-label="Toggle AI Reception Assistant">
+            <input type="checkbox" checked>
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="fc-title">AI Reception Assistant</div>
+        <div class="fc-desc">Automatically answers patient queries 24/7 with intelligent responses.</div>
+        <div class="fc-status">
+          <div class="fc-status-dot active"></div>
+          Active · 203 queries handled
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="feature-card fade-in fade-in-4">
+        <div class="fc-top">
+          <div class="fc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><polyline points="23,18 13.5,8.5 8.5,13.5 1,6"/><polyline points="17,18 23,18 23,12"/></svg>
+          </div>
+          <label class="toggle" aria-label="Toggle Missed Appointment Recovery">
+            <input type="checkbox" checked>
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="fc-title">Missed Appointment Recovery</div>
+        <div class="fc-desc">Automatically follows up with patients who missed their scheduled visit.</div>
+        <div class="fc-status">
+          <div class="fc-status-dot active"></div>
+          Active · 8 recovered today
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="feature-card fade-in fade-in-4">
+        <div class="fc-top">
+          <div class="fc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          </div>
+          <label class="toggle" aria-label="Toggle Smart Patient Tags">
+            <input type="checkbox" checked>
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="fc-title">Smart Patient Tags</div>
+        <div class="fc-desc">AI automatically categorises patients by visit frequency and health profile.</div>
+        <div class="fc-status">
+          <div class="fc-status-dot active"></div>
+          Active · 1,247 patients tagged
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RECENT PATIENTS -->
+  <section aria-labelledby="patients-heading">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title" id="patients-heading">Recent Patients</h2>
+        <div class="section-sub">Quick actions on latest visits</div>
+      </div>
+      <button class="see-all">All patients →</button>
+    </div>
+
+    <div class="patients-list fade-in">
+      <div class="patient-row">
+        <div class="pat-avatar" style="background:linear-gradient(135deg,#667eea,#764ba2)">PS</div>
+        <div class="pat-info">
+          <div class="pat-name">Priya Sharma</div>
+          <div class="pat-phone">+91 98765 43210</div>
+        </div>
+        <div class="pat-badges">
+          <span class="badge badge-green">Confirmed</span>
+          <span class="badge badge-blue">Returning</span>
+        </div>
+        <div class="pat-actions">
+          <button class="action-btn">Reminder</button>
+          <button class="action-btn">Follow-Up</button>
+          <button class="action-btn">Review</button>
+        </div>
+      </div>
+
+      <div class="patient-row">
+        <div class="pat-avatar" style="background:linear-gradient(135deg,#f093fb,#f5576c)">AK</div>
+        <div class="pat-info">
+          <div class="pat-name">Anil Kumar</div>
+          <div class="pat-phone">+91 87654 32109</div>
+        </div>
+        <div class="pat-badges">
+          <span class="badge badge-amber">Pending</span>
+          <span class="badge badge-gray">New</span>
+        </div>
+        <div class="pat-actions">
+          <button class="action-btn">Confirm</button>
+          <button class="action-btn">Follow-Up</button>
+          <button class="action-btn">Review</button>
+        </div>
+      </div>
+
+      <div class="patient-row">
+        <div class="pat-avatar" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">RM</div>
+        <div class="pat-info">
+          <div class="pat-name">Rohan Mehta</div>
+          <div class="pat-phone">+91 76543 21098</div>
+        </div>
+        <div class="pat-badges">
+          <span class="badge badge-red">Missed</span>
+          <span class="badge badge-gray">Recovery</span>
+        </div>
+        <div class="pat-actions">
+          <button class="action-btn">Reminder</button>
+          <button class="action-btn">Confirm</button>
+          <button class="action-btn">Review</button>
+        </div>
+      </div>
+
+      <div class="patient-row">
+        <div class="pat-avatar" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">SP</div>
+        <div class="pat-info">
+          <div class="pat-name">Sunita Patel</div>
+          <div class="pat-phone">+91 65432 10987</div>
+        </div>
+        <div class="pat-badges">
+          <span class="badge badge-green">Confirmed</span>
+          <span class="badge badge-blue">Returning</span>
+        </div>
+        <div class="pat-actions">
+          <button class="action-btn">Follow-Up</button>
+          <button class="action-btn">Review</button>
+          <button class="action-btn">Reminder</button>
+        </div>
+      </div>
+
+      <div class="patient-row">
+        <div class="pat-avatar" style="background:linear-gradient(135deg,#fa709a,#fee140)">DG</div>
+        <div class="pat-info">
+          <div class="pat-name">Divya Gupta</div>
+          <div class="pat-phone">+91 54321 09876</div>
+        </div>
+        <div class="pat-badges">
+          <span class="badge badge-green">Completed</span>
+          <span class="badge badge-amber">Review Sent</span>
+        </div>
+        <div class="pat-actions">
+          <button class="action-btn">Follow-Up</button>
+          <button class="action-btn">Reminder</button>
+          <button class="action-btn">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANALYTICS -->
+  <section aria-labelledby="analytics-heading">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title" id="analytics-heading">Analytics Overview</h2>
+        <div class="section-sub">Last 30 days</div>
+      </div>
+      <button class="see-all">Full reports →</button>
     </div>
 
     <div class="analytics-grid">
-      <div class="analytics-card">
-        <div class="analytics-icon" style="background:#EEF2FF">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#4F7CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
+      <div class="analytics-card fade-in fade-in-1">
+        <div class="ac-top">
+          <span class="ac-label">Messages Sent</span>
+          <div class="sparkline">
+            <div class="spark-bar" style="height:40%"></div>
+            <div class="spark-bar" style="height:55%"></div>
+            <div class="spark-bar" style="height:48%"></div>
+            <div class="spark-bar" style="height:70%"></div>
+            <div class="spark-bar" style="height:65%"></div>
+            <div class="spark-bar" style="height:82%"></div>
+            <div class="spark-bar" style="height:100%"></div>
+          </div>
         </div>
-        <div class="analytics-value">4,821</div>
-        <div class="analytics-label">Messages Sent</div>
-        <div class="analytics-growth">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-          +18.4%
-        </div>
-        <div class="bar-chart">
-          <div class="bar" style="height:40%"></div><div class="bar" style="height:55%"></div>
-          <div class="bar" style="height:48%"></div><div class="bar" style="height:65%"></div>
-          <div class="bar" style="height:58%"></div><div class="bar" style="height:72%"></div>
-          <div class="bar highlight" style="height:88%"></div>
-        </div>
+        <div class="ac-value">48,291</div>
+        <div class="ac-bar-wrap"><div class="ac-bar" style="width:82%"></div></div>
+        <div class="ac-growth">↑ 23% vs last month</div>
       </div>
 
-      <div class="analytics-card">
-        <div class="analytics-icon" style="background:#ECFDF5">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
+      <div class="analytics-card fade-in fade-in-2">
+        <div class="ac-top">
+          <span class="ac-label">Returning Patients</span>
+          <div class="sparkline">
+            <div class="spark-bar green-bar" style="height:35%"></div>
+            <div class="spark-bar green-bar" style="height:50%"></div>
+            <div class="spark-bar green-bar" style="height:60%"></div>
+            <div class="spark-bar green-bar" style="height:55%"></div>
+            <div class="spark-bar green-bar" style="height:75%"></div>
+            <div class="spark-bar green-bar" style="height:88%"></div>
+            <div class="spark-bar green-bar" style="height:100%"></div>
+          </div>
         </div>
-        <div class="analytics-value">312</div>
-        <div class="analytics-label">Returning Patients</div>
-        <div class="analytics-growth">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-          +24.1%
-        </div>
-        <div class="bar-chart">
-          <div class="bar" style="height:35%"></div><div class="bar" style="height:42%"></div>
-          <div class="bar" style="height:50%"></div><div class="bar" style="height:60%"></div>
-          <div class="bar" style="height:55%"></div><div class="bar" style="height:68%"></div>
-          <div class="bar highlight" style="height:80%"></div>
-        </div>
+        <div class="ac-value">1,847</div>
+        <div class="ac-bar-wrap"><div class="ac-bar green" style="width:68%"></div></div>
+        <div class="ac-growth">↑ 18% vs last month</div>
       </div>
 
-      <div class="analytics-card">
-        <div class="analytics-icon" style="background:#FFFBEB">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-          </svg>
+      <div class="analytics-card fade-in fade-in-3">
+        <div class="ac-top">
+          <span class="ac-label">Reviews Generated</span>
+          <div class="sparkline">
+            <div class="spark-bar" style="height:30%"></div>
+            <div class="spark-bar" style="height:45%"></div>
+            <div class="spark-bar" style="height:55%"></div>
+            <div class="spark-bar" style="height:70%"></div>
+            <div class="spark-bar" style="height:78%"></div>
+            <div class="spark-bar" style="height:90%"></div>
+            <div class="spark-bar" style="height:100%"></div>
+          </div>
         </div>
-        <div class="analytics-value">89</div>
-        <div class="analytics-label">Reviews Generated</div>
-        <div class="analytics-growth">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-          +31.6%
-        </div>
-        <div class="bar-chart">
-          <div class="bar" style="height:30%"></div><div class="bar" style="height:38%"></div>
-          <div class="bar" style="height:45%"></div><div class="bar" style="height:55%"></div>
-          <div class="bar" style="height:62%"></div><div class="bar" style="height:70%"></div>
-          <div class="bar highlight" style="height:85%"></div>
-        </div>
+        <div class="ac-value">3,102</div>
+        <div class="ac-bar-wrap"><div class="ac-bar" style="width:91%"></div></div>
+        <div class="ac-growth">↑ 41% vs last month</div>
       </div>
 
-      <div class="analytics-card">
-        <div class="analytics-icon" style="background:#F0FDF4">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-          </svg>
+      <div class="analytics-card fade-in fade-in-4">
+        <div class="ac-top">
+          <span class="ac-label">Automation Success</span>
+          <div class="sparkline">
+            <div class="spark-bar green-bar" style="height:80%"></div>
+            <div class="spark-bar green-bar" style="height:82%"></div>
+            <div class="spark-bar green-bar" style="height:88%"></div>
+            <div class="spark-bar green-bar" style="height:86%"></div>
+            <div class="spark-bar green-bar" style="height:91%"></div>
+            <div class="spark-bar green-bar" style="height:93%"></div>
+            <div class="spark-bar green-bar" style="height:100%"></div>
+          </div>
         </div>
-        <div class="analytics-value">96.3%</div>
-        <div class="analytics-label">Automation Success Rate</div>
-        <div class="analytics-growth">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-          +2.8%
+        <div class="ac-value">94.6%</div>
+        <div class="ac-bar-wrap"><div class="ac-bar green" style="width:94%"></div></div>
+        <div class="ac-growth">↑ 6% vs last month</div>
+      </div>
+
+      <div class="analytics-card fade-in fade-in-5">
+        <div class="ac-top">
+          <span class="ac-label">Missed Recovered</span>
+          <div class="sparkline">
+            <div class="spark-bar" style="height:20%"></div>
+            <div class="spark-bar" style="height:40%"></div>
+            <div class="spark-bar" style="height:55%"></div>
+            <div class="spark-bar" style="height:62%"></div>
+            <div class="spark-bar" style="height:75%"></div>
+            <div class="spark-bar" style="height:88%"></div>
+            <div class="spark-bar" style="height:100%"></div>
+          </div>
         </div>
-        <div class="bar-chart">
-          <div class="bar" style="height:82%"></div><div class="bar" style="height:85%"></div>
-          <div class="bar" style="height:88%"></div><div class="bar" style="height:87%"></div>
-          <div class="bar" style="height:91%"></div><div class="bar" style="height:93%"></div>
-          <div class="bar highlight" style="height:96%"></div>
-        </div>
+        <div class="ac-value">312</div>
+        <div class="ac-bar-wrap"><div class="ac-bar" style="width:58%"></div></div>
+        <div class="ac-growth">↑ 29% vs last month</div>
       </div>
     </div>
+  </section>
 
-    <!-- AUTOMATION SECTION -->
-    <div class="section-header mb-20">
+  <!-- PRICING -->
+  <section aria-labelledby="pricing-heading">
+    <div class="section-head">
       <div>
-        <div class="section-title">Automation Workflows</div>
-        <div class="section-sub">8 active · Toggle to enable or disable</div>
+        <h2 class="section-title" id="pricing-heading">Simple Pricing</h2>
+        <div class="section-sub">Start free. Scale as you grow.</div>
       </div>
     </div>
 
-    <div class="automation-grid mb-28">
-
-      <!-- Card 1 -->
-      <div class="automation-card" style="animation-delay:0.08s">
-        <div class="automation-card-header">
-          <div class="automation-icon" style="background:#EEF2FF">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#4F7CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-            </svg>
-          </div>
-          <label class="toggle">
-            <input type="checkbox" checked>
-            <div class="toggle-track"></div>
-            <div class="toggle-thumb"></div>
-          </label>
-        </div>
-        <div class="automation-title">Appointment Confirmation</div>
-        <div class="automation-desc">Automatically confirms appointments via WhatsApp 24h before visit.</div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="automation-card" style="animation-delay:0.12s">
-        <div class="automation-card-header">
-          <div class="automation-icon" style="background:#FEF3C7">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/>
-            </svg>
-          </div>
-          <label class="toggle">
-            <input type="checkbox" checked>
-            <div class="toggle-track"></div>
-            <div class="toggle-thumb"></div>
-          </label>
-        </div>
-        <div class="automation-title">14-Day Return Reminder</div>
-        <div class="automation-desc">Re-engages patients who haven't booked a follow-up in 2 weeks.</div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="automation-card" style="animation-delay:0.16s">
-        <div class="automation-card-header">
-          <div class="automation-icon" style="background:#FFF7ED">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-            </svg>
-          </div>
-          <label class="toggle">
-            <input type="checkbox" checked>
-            <div class="toggle-track"></div>
-            <div class="toggle-thumb"></div>
-          </label>
-        </div>
-        <div class="automation-title">Google Review Request</div>
-        <div class="automation-desc">Sends review prompts 2 hours after each successful appointment.</div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="automation-card" style="animation-delay:0.20s">
-        <div class="automation-card-header">
-          <div class="automation-icon" style="background:#F0FDF4">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"/>
-            </svg>
-          </div>
-          <label class="toggle">
-            <input type="checkbox" checked>
-            <div class="toggle-track"></div>
-            <div class="toggle-thumb"></div>
-          </label>
-        </div>
-        <div class="automation-title">48-Hour Follow-Up</div>
-        <div class="automation-desc">Checks patient recovery and satisfaction two days post-visit.</div>
-      </div>
-
-      <!-- Card 5 -->
-      <div class="automation-card" style="animation-delay:0.24s">
-        <div class="automation-card-header">
-          <div class="automation-icon" style="background:#F5F3FF">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-            </svg>
-          </div>
-          <label class="toggle">
-            <input type="checkbox" checked>
-            <div class="toggle-track"></div>
-            <div class="toggle-thumb"></div>
-          </label>
-        </div>
-        <div class="automation-title">WhatsApp Broadcast Campaigns</div>
-        <div class="automation-desc">Scheduled bulk messages to segmented patient lists.</div>
-      </div>
-
-      <!-- Card 6 -->
-      <div class="automation-card" style="animation-delay:0.28s">
-        <div class="automation-card-header">
-          <div class="automation-icon" style="background:#EEF2FF">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#4F7CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
-            </svg>
-          </div>
-          <label class="toggle">
-            <input type="checkbox" checked>
-            <div class="toggle-track"></div>
-            <div class="toggle-thumb"></div>
-          </label>
-        </div>
-        <div class="automation-title">AI Reception Assistant</div>
-        <div class="automation-desc">GPT-powered bot handles queries, bookings and FAQs 24/7.</div>
-      </div>
-
-      <!-- Card 7 -->
-      <div class="automation-card" style="animation-delay:0.32s">
-        <div class="automation-card-header">
-          <div class="automation-icon" style="background:#FEF2F2">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
-          </div>
-          <label class="toggle">
-            <input type="checkbox">
-            <div class="toggle-track"></div>
-            <div class="toggle-thumb"></div>
-          </label>
-        </div>
-        <div class="automation-title">Missed Appointment Recovery</div>
-        <div class="automation-desc">Automatically reaches out to no-show patients to reschedule.</div>
-      </div>
-
-      <!-- Card 8 -->
-      <div class="automation-card" style="animation-delay:0.36s">
-        <div class="automation-card-header">
-          <div class="automation-icon" style="background:#F0FDF4">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
-            </svg>
-          </div>
-          <label class="toggle">
-            <input type="checkbox" checked>
-            <div class="toggle-track"></div>
-            <div class="toggle-thumb"></div>
-          </label>
-        </div>
-        <div class="automation-title">Smart Patient Tags</div>
-        <div class="automation-desc">Auto-labels patients by treatment type, visit frequency, and value.</div>
-      </div>
-    </div>
-
-    <!-- RECENT PATIENTS -->
-    <div class="section-header mb-20">
-      <div>
-        <div class="section-title">Recent Patients</div>
-        <div class="section-sub">Today · 14 interactions</div>
-      </div>
-      <a class="view-all" href="#">
-        All Patients
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 18 15 12 9 6"/>
-        </svg>
-      </a>
-    </div>
-
-    <div class="patients-table-wrap fade-in" style="animation-delay:0.2s">
-      <div class="patients-toolbar">
-        <div class="search-wrap">
-          <div class="search-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-          </div>
-          <input class="search-input" type="text" placeholder="Search patients…">
-        </div>
-        <button class="filter-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/>
-          </svg>
-          Filter
-        </button>
-        <button class="filter-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Export
-        </button>
-      </div>
-
-      <div class="patients-list">
-        <!-- Patient 1 -->
-        <div class="patient-row">
-          <div class="patient-avatar" style="background:#EEF2FF;color:#4F7CFF">PS</div>
-          <div class="patient-info">
-            <div class="patient-name">Priya Sharma</div>
-            <div class="patient-phone">+91 98300 12345</div>
-          </div>
-          <span class="status-badge status-confirmed">✓ Confirmed</span>
-          <div class="patient-actions">
-            <button class="action-btn">Reminder</button>
-            <button class="action-btn">Follow-Up</button>
-            <button class="action-btn">Review</button>
-          </div>
-        </div>
-
-        <!-- Patient 2 -->
-        <div class="patient-row">
-          <div class="patient-avatar" style="background:#FEF3C7;color:#D97706">RB</div>
-          <div class="patient-info">
-            <div class="patient-name">Rahul Bose</div>
-            <div class="patient-phone">+91 70001 67890</div>
-          </div>
-          <span class="status-badge status-pending">⏳ Pending</span>
-          <div class="patient-actions">
-            <button class="action-btn">Reminder</button>
-            <button class="action-btn">Follow-Up</button>
-            <button class="action-btn">Confirm</button>
-          </div>
-        </div>
-
-        <!-- Patient 3 -->
-        <div class="patient-row">
-          <div class="patient-avatar" style="background:#FEF2F2;color:#DC2626">AM</div>
-          <div class="patient-info">
-            <div class="patient-name">Ananya Mukherjee</div>
-            <div class="patient-phone">+91 83200 45678</div>
-          </div>
-          <span class="status-badge status-missed">✕ Missed</span>
-          <div class="patient-actions">
-            <button class="action-btn">Reminder</button>
-            <button class="action-btn">Follow-Up</button>
-            <button class="action-btn">Confirm</button>
-          </div>
-        </div>
-
-        <!-- Patient 4 -->
-        <div class="patient-row">
-          <div class="patient-avatar" style="background:#EEF2FF;color:#4F7CFF">SK</div>
-          <div class="patient-info">
-            <div class="patient-name">Suresh Kumar</div>
-            <div class="patient-phone">+91 91234 56789</div>
-          </div>
-          <span class="status-badge status-followup">↩ Follow-Up</span>
-          <div class="patient-actions">
-            <button class="action-btn">Reminder</button>
-            <button class="action-btn">Review</button>
-            <button class="action-btn">Confirm</button>
-          </div>
-        </div>
-
-        <!-- Patient 5 -->
-        <div class="patient-row">
-          <div class="patient-avatar" style="background:#F0FDF4;color:#059669">ND</div>
-          <div class="patient-info">
-            <div class="patient-name">Nidhi Das</div>
-            <div class="patient-phone">+91 95551 23456</div>
-          </div>
-          <span class="status-badge status-confirmed">✓ Confirmed</span>
-          <div class="patient-actions">
-            <button class="action-btn">Reminder</button>
-            <button class="action-btn">Follow-Up</button>
-            <button class="action-btn">Review</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PRICING SECTION -->
-    <div class="section-header mb-20" style="margin-top:40px">
-      <div>
-        <div class="section-title">Plans & Pricing</div>
-        <div class="section-sub">Choose the right plan for your clinic</div>
-      </div>
-    </div>
-
-    <div class="pricing-grid">
+    <div class="pricing-grid fade-in">
 
       <!-- Starter -->
-      <div class="pricing-card" style="animation-delay:0.1s">
-        <div class="pricing-tier">Starter</div>
-        <div class="pricing-price">₹999<span>/mo</span></div>
-        <div class="pricing-desc">Perfect for solo practitioners and small clinics getting started with automation.</div>
-        <ul class="pricing-features">
-          <li class="pricing-feature">
-            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="price-card">
+        <div class="price-plan">Starter</div>
+        <p class="price-tagline">For small clinics beginning automation.</p>
+        <div class="price-amount">
+          <span class="price-currency">₹</span>
+          <span class="price-num">999</span>
+          <span class="price-per">/month</span>
+        </div>
+        <ul class="price-features">
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
             500 WhatsApp reminders/month
           </li>
-          <li class="pricing-feature">
-            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
             Appointment confirmations
           </li>
-          <li class="pricing-feature">
-            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Follow-up automation
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
+            48-hour follow-up automation
           </li>
-          <li class="pricing-feature">
-            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
             Basic analytics dashboard
           </li>
         </ul>
-        <button class="btn-pricing btn-pricing-outline">Get Started</button>
+        <button class="price-cta cta-outline">Get Started</button>
       </div>
 
-      <!-- Growth - Featured -->
-      <div class="pricing-card featured" style="animation-delay:0.17s">
-        <div class="pricing-popular-badge">✦ Most Popular</div>
-        <div class="pricing-tier" style="color:var(--blue)">Growth</div>
-        <div class="pricing-price">₹1,999<span>/mo</span></div>
-        <div class="pricing-desc">Everything growing clinics need to automate and scale patient communication.</div>
-        <ul class="pricing-features">
-          <li class="pricing-feature">
-            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <!-- Growth -->
+      <div class="price-card featured">
+        <div class="popular-badge">Most Popular</div>
+        <div class="price-plan">Growth</div>
+        <p class="price-tagline">Complete automation for growing practices.</p>
+        <div class="price-amount">
+          <span class="price-currency" style="color:#3558E8">₹</span>
+          <span class="price-num" style="color:var(--gray-900)">1,999</span>
+          <span class="price-per">/month</span>
+        </div>
+        <ul class="price-features">
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
             Everything in Starter
           </li>
-          <li class="pricing-feature">
-            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
             AI Reception Assistant
           </li>
-          <li class="pricing-feature">
-            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Broadcast campaigns
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
+            WhatsApp broadcast campaigns
           </li>
-          <li class="pricing-feature">
-            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Google Review automation
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
+            Google review automation
           </li>
-          <li class="pricing-feature">
-            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Smart patient tagging
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
+            Smart patient tags
           </li>
         </ul>
-        <button class="btn-pricing btn-pricing-solid">Start Free Trial</button>
+        <button class="price-cta cta-blue">Start Growth Plan</button>
       </div>
 
-      <!-- Pro -->
-      <div class="pricing-card" style="animation-delay:0.24s">
-        <div class="pricing-tier">Pro</div>
-        <div class="pricing-price">₹2,999<span>/mo</span></div>
-        <div class="pricing-desc">Enterprise-grade for multi-location clinics and diagnostic chains.</div>
-        <ul class="pricing-features">
-          <li class="pricing-feature">
-            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <!-- Scale -->
+      <div class="price-card scale-card">
+        <div class="price-plan">Scale</div>
+        <p class="price-tagline">Advanced operational automation for multi-clinic practices.</p>
+        <div class="price-amount">
+          <span class="price-currency" style="color:#6B7280">₹</span>
+          <span class="price-num">2,999</span>
+          <span class="price-per" style="color:#6B7280">/month</span>
+        </div>
+        <ul class="price-features">
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
             Everything in Growth
           </li>
-          <li class="pricing-feature">
-            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Unlimited workflows
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
+            Unlimited automation workflows
           </li>
-          <li class="pricing-feature">
-            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
             Multi-clinic support
           </li>
-          <li class="pricing-feature">
-            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Advanced analytics suite
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
+            Advanced analytics & exports
           </li>
-          <li class="pricing-feature">
-            <div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Priority support (SLA)
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
+            Priority support & onboarding
           </li>
         </ul>
-        <button class="btn-pricing btn-pricing-outline">Contact Sales</button>
+        <button class="price-cta cta-white">Contact Sales</button>
       </div>
     </div>
 
-  </main>
-</div>
+    <div class="price-footer fade-in">
+      Need more? <a href="#">Enterprise & AI Suite plans available →</a> · All plans include 14-day free trial · No setup fees
+    </div>
+  </section>
 
-<!-- BOTTOM NAV (mobile/tablet) -->
-<nav class="bottom-nav">
-  <div class="bnav-item active">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect>
-      <rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
-    </svg>
-    Dashboard
-  </div>
-  <div class="bnav-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-      <circle cx="9" cy="7" r="4"/>
-    </svg>
-    Patients
-  </div>
-  <div class="bnav-fab">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-    </svg>
-  </div>
-  <div class="bnav-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-    </svg>
-    Automation
-  </div>
-  <div class="bnav-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
-      <line x1="6" y1="20" x2="6" y2="14"/>
-    </svg>
-    Reports
-  </div>
+  <div class="page-bottom"></div>
+</div>
+</main>
+
+<!-- ── BOTTOM NAV ── -->
+<nav class="bottom-nav" aria-label="Bottom navigation">
+  <button class="bn-item active" aria-label="Dashboard" aria-current="page">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    <span class="bn-label">Dashboard</span>
+  </button>
+
+  <button class="bn-item" aria-label="Patients">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <span class="bn-label">Patients</span>
+  </button>
+
+  <button class="bn-fab" aria-label="New automation">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+
+  <button class="bn-item" aria-label="Reports">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    <span class="bn-label">Reports</span>
+  </button>
+
+  <button class="bn-item" aria-label="Settings">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 0 20.66 7M22 2l-3 3-3-3"/></svg>
+    <span class="bn-label">Settings</span>
+  </button>
 </nav>
 
 <script>
-  document.querySelectorAll('.toggle input').forEach(cb => {
-    cb.addEventListener('change', function() {
-      const card = this.closest('.automation-card');
+  // Toggle interactions
+  document.querySelectorAll('.toggle input').forEach(input => {
+    input.addEventListener('change', function() {
+      const card = this.closest('.feature-card');
+      const dot = card.querySelector('.fc-status-dot');
+      const statusText = card.querySelector('.fc-status');
       if (this.checked) {
-        card.style.opacity = '1';
+        dot.classList.add('active');
       } else {
-        card.style.opacity = '0.55';
+        dot.classList.remove('active');
       }
     });
   });
 
-  document.querySelectorAll('.action-btn').forEach(btn => {
+  // Bottom nav active states
+  document.querySelectorAll('.bn-item').forEach(btn => {
     btn.addEventListener('click', function() {
-      const orig = this.textContent;
-      this.textContent = '✓ Sent';
-      this.style.background = 'var(--green-light)';
-      this.style.color = '#059669';
-      this.style.borderColor = 'rgba(16,185,129,0.2)';
-      setTimeout(() => {
-        this.textContent = orig;
-        this.style.background = '';
-        this.style.color = '';
-        this.style.borderColor = '';
-      }, 1800);
+      document.querySelectorAll('.bn-item').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
     });
   });
 
-  document.querySelectorAll('.bnav-item').forEach(item => {
-    item.addEventListener('click', function() {
-      document.querySelectorAll('.bnav-item').forEach(i => i.classList.remove('active'));
-      this.classList.add('active');
+  // Animate analytics bars on scroll
+  const bars = document.querySelectorAll('.ac-bar');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.width = entry.target.getAttribute('data-w') || entry.target.style.width;
+      }
+    });
+  }, { threshold: 0.3 });
+
+  bars.forEach(bar => {
+    const w = bar.style.width;
+    bar.style.width = '0%';
+    bar.setAttribute('data-w', w);
+    observer.observe(bar);
+    setTimeout(() => { bar.style.width = w; }, 400);
+  });
+
+  // Feature card hover glow
+  document.querySelectorAll('.feature-card').forEach(card => {
+    card.addEventListener('mouseenter', function(e) {
+      this.style.boxShadow = '0 12px 40px rgba(79,124,255,0.12), 0 4px 16px rgba(0,0,0,0.05)';
+    });
+    card.addEventListener('mouseleave', function() {
+      this.style.boxShadow = '';
     });
   });
 </script>
